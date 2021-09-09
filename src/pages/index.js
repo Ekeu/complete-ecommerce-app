@@ -1,11 +1,10 @@
-import * as React from "react"
-import Layout from "../components/layout/layout.component"
+import * as React from 'react'
+import Layout from '../components/layout/layout.component'
+import Hero from '../components/home/hero/hero.component'
 
 const IndexPage = () => (
   <Layout>
-    <h1 className='font-hind text-violet-700'>Hi Tailwind</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
+    <Hero />
   </Layout>
 )
 
