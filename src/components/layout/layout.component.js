@@ -10,13 +10,17 @@ import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
 
 import Header from '../header/header.component'
+import Footer from '../footer/footer.component'
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
+    query GetCategories {
+      allStrapiCategory {
+        edges {
+          node {
+            name
+            strapiId
+          }
         }
       }
     }
@@ -24,7 +28,7 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <Header />
+      <Header categories={data.allStrapiCategory.edges} />
       <div
         style={{
           margin: `0 auto`,
@@ -33,15 +37,7 @@ const Layout = ({ children }) => {
         }}
       >
         <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `2rem`,
-          }}
-        >
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
+        <Footer />
       </div>
     </>
   )
