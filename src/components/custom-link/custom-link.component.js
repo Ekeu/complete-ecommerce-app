@@ -33,6 +33,16 @@ const CustomLink = ({ link, customStyles, children, type, ...otherProps }) => {
         {children}
       </Link>
     )
+  } else if (type === 'link-button') {
+    Component = (
+      <Link
+        to={link}
+        {...otherProps}
+        className={`rounded-md font-hind border border-transparent font-medium ${customStyles}`}
+      >
+        {children}
+      </Link>
+    )
   } else {
     Component = (
       <Link to={link} {...otherProps} className={customStyles}>

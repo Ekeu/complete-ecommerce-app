@@ -3,6 +3,7 @@ import React from 'react'
 import ImageHero from './image-hero.component'
 import GridContainer from './grid-container.component'
 import Grid from './grid.component'
+import CustomLink from '../../custom-link/custom-link.component'
 
 import { GRID_IMAGES } from '../../../constants/hero.constants'
 
@@ -13,10 +14,11 @@ const Hero = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static">
           <div className="sm:max-w-lg">
             <h1 className="text-4xl font font-extrabold font-hind tracking-tight text-blue-gray-800 sm:text-7xl uppercase">
-              FALL FAVORITES
+              Comeback Season
             </h1>
             <p className="mt-4 text-lg font-osans text-blue-gray-500">
-              Get ready for the season with fresh clothing styles.
+              New goals. New dreams. All-new men's back to school styles for
+              every part of your week.
             </p>
           </div>
           <div>
@@ -50,12 +52,15 @@ const Hero = () => {
                   ))}
                 </Grid>
               </GridContainer>
-              <a
-                href="#"
-                className="inline-block text-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-indigo-700"
+              <CustomLink
+                type={'link-button'}
+                link={'/hats'}
+                customStyles={
+                  'inline-block text-center bg-purple-600 py-3 px-8 text-white hover:bg-purple-700'
+                }
               >
-                Shop Collection
-              </a>
+                Shop Now
+              </CustomLink>
             </div>
           </div>
         </div>
