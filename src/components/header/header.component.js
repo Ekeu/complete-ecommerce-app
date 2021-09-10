@@ -14,7 +14,6 @@ import CustomLink from '../custom-link/custom-link.component'
 import Logo from '../../images/icon-adidas-logo.svg'
 
 const Header = ({ categories }) => {
-  console.log(categories)
   const [open, setOpen] = useState(false)
 
   const routes = [
