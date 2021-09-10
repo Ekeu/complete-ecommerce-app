@@ -7,31 +7,34 @@
 
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import { useStaticQuery, graphql } from 'gatsby'
+import { StaticQuery, graphql } from 'gatsby'
 
 import Header from '../header/header.component'
 import Footer from '../footer/footer.component'
 
 const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query GetCategories {
-      allStrapiCategory {
-        edges {
-          node {
-            name
-            strapiId
+  return (
+    <StaticQuery
+      query={graphql`
+        query GetCategories {
+          allStrapiCategory {
+            edges {
+              node {
+                name
+                strapiId
+              }
+            }
           }
         }
-      }
-    }
-  `)
-
-  return (
-    <>
-      <Header categories={data.allStrapiCategory.edges} />
-      <main>{children}</main>
-      <Footer />
-    </>
+      `}
+      render={data => (
+        <>
+          <Header categories={data.allStrapiCategory.edges} />
+          <main>{children}</main>
+          <Footer />
+        </>
+      )}
+    />
   )
 }
 

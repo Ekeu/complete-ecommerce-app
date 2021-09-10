@@ -25,6 +25,7 @@ const Hero = () => {
                 <Grid>
                   {GRID_IMAGES.grid1.images.map(image => (
                     <ImageHero
+                      key={image.publicId}
                       publicId={image.publicId}
                       customStyles={image.styles || ''}
                     />
@@ -33,6 +34,7 @@ const Hero = () => {
                 <Grid>
                   {GRID_IMAGES.grid2.images.map(image => (
                     <ImageHero
+                      key={image.publicId}
                       publicId={image.publicId}
                       customStyles={image.styles || ''}
                     />
@@ -41,6 +43,7 @@ const Hero = () => {
                 <Grid>
                   {GRID_IMAGES.grid3.images.map(image => (
                     <ImageHero
+                      key={image.publicId}
                       publicId={image.publicId}
                       customStyles={image.styles || ''}
                     />
