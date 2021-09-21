@@ -25,7 +25,6 @@ const FeaturedProducts = () => {
         }
       `}
       render={data => {
-        console.log(data)
         let featuredProducts = []
         data.allStrapiProduct.edges.map(({ node }) =>
           featuredProducts.push({
