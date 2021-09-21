@@ -10,7 +10,8 @@ const Pagination = ({
   pageRangeDisplayed,
   marginPagesDisplayed,
   initialPage,
-  onPageChange
+  forcePage,
+  onPageChange,
 }) => {
   return (
     <main className="pt-8 pb-16">
@@ -19,6 +20,7 @@ const Pagination = ({
           pageCount={pageCount}
           pageRangeDisplayed={pageRangeDisplayed}
           initialPage={initialPage}
+          forcePage={forcePage}
           onPageChange={onPageChange}
           marginPagesDisplayed={marginPagesDisplayed}
           previousLabel={
