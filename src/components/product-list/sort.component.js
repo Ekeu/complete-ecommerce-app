@@ -4,7 +4,13 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 
 import { classNames } from '../../utils/functions'
 
-const Sort = ({ sortOptions }) => {
+const Sort = ({ sortOptions, setSortOptions }) => {
+  const handleSort = index => {
+    const newSortOptions = [...sortOptions]
+    newSortOptions.forEach(sortOption => (sortOption.current = false))
+    newSortOptions[index].current = true
+    setSortOptions(newSortOptions)
+  }
   return (
     <div className="col-start-1 row-start-1 py-4 font-hind">
       <div className="flex justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,21 +36,21 @@ const Sort = ({ sortOptions }) => {
           >
             <Menu.Items className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="py-1">
-                {sortOptions.map(option => (
+                {sortOptions.map((option, index) => (
                   <Menu.Item key={option.name}>
                     {({ active }) => (
-                      <a
-                        href={option.href}
+                      <span
+                        onClick={() => handleSort(index)}
                         className={classNames(
                           option.current
                             ? 'font-medium text-blue-gray-900'
                             : 'text-blue-gray-500',
                           active ? 'bg-blue-gray-100' : '',
-                          'block px-4 py-2 text-sm'
+                          'block px-4 py-2 text-sm cursor-pointer'
                         )}
                       >
                         {option.name}
-                      </a>
+                      </span>
                     )}
                   </Menu.Item>
                 ))}

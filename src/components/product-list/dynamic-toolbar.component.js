@@ -7,22 +7,25 @@ import FilterContainer from './filter-container.component'
 import Sort from './sort.component'
 import DescriptionContainer from './description-container.component'
 
-const sortOptions = [
-  { name: 'A-Z', href: '#', current: true },
-  { name: 'Z-A', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Oldest', href: '#', current: false },
-  { name: 'Reviews', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
-
 const DynamicToolbar = ({
   filterOptions,
   setFilterOptions,
+  sortOptions,
+  setSortOptions,
   name,
+  activeFilters,
+  setActiveFilters,
   description,
 }) => {
+  const handleClearFilters = () => {
+    let prvFilterOptions = { ...filterOptions }
+    for (const property in prvFilterOptions) {
+      prvFilterOptions[property].forEach(option => (option.checked = false))
+    }
+    setFilterOptions(prvFilterOptions)
+    setActiveFilters({})
+  }
+
   return (
     <>
       <DescriptionContainer name={name} description={description} />
@@ -42,11 +45,15 @@ const DynamicToolbar = ({
                   className="flex-none w-5 h-5 mr-2 text-blue-gray-400 group-hover:text-blue-gray-500"
                   aria-hidden="true"
                 />
-                2 Filters
+                {Object.values(activeFilters).flat().length} Filters
               </Disclosure.Button>
             </div>
             <div className="pl-6">
-              <button type="button" className="text-blue-gray-500">
+              <button
+                type="button"
+                onClick={handleClearFilters}
+                className="text-blue-gray-500"
+              >
                 Clear all
               </button>
             </div>
@@ -80,7 +87,7 @@ const DynamicToolbar = ({
             </FilterContainer>
           </div>
         </Disclosure.Panel>
-        <Sort sortOptions={sortOptions} />
+        <Sort sortOptions={sortOptions} setSortOptions={setSortOptions} />
       </Disclosure>
     </>
   )

@@ -6,101 +6,142 @@ import DynamicToolbar from '../components/product-list/dynamic-toolbar.component
 import LisOfProducts from '../components/product-list/list-of-products.component'
 import Pagination from '../components/pagination/pagination.component'
 
+import { alphabetical, time, price } from '../utils/sort'
+
 const ProductList = ({ data, pageContext }) => {
   const [page, setPage] = useState(1)
   const [reset, setReset] = useState(false)
+  const [isFiltered, setIsFiltered] = useState(false)
+  const [activeFilters, setActiveFilters] = useState({})
+  const [filteredProducts, setFilteredProducts] = useState([])
+  const [productsContent, setProductsContent] = useState([])
   const [filterOptions, setFilterOptions] = useState(pageContext.filterOptions)
-  const productsPerPage = 8
+  const [sortOptions, setSortOptions] = useState([
+    { name: 'A-Z', current: true, sort: data => alphabetical(data, 'asc') },
+    {
+      name: 'Z-A',
+      current: false,
+      sort: data => alphabetical(data, 'desc'),
+    },
+    { name: 'Newest', current: false, sort: data => time(data, 'asc') },
+    { name: 'Oldest', current: false, sort: data => time(data, 'desc') },
+    { name: 'Reviews', current: false, sort: data => data },
+    {
+      name: 'Price: Low to High',
+      current: false,
+      sort: data => price(data, 'asc'),
+    },
+    {
+      name: 'Price: High to Low',
+      current: false,
+      sort: data => price(data, 'desc'),
+    },
+  ])
 
-  let productsContent = []
-  let isFiltered = false
-  let activeFilters = {}
-  let filteredProducts = []
-
-  data.products.edges.map((product, index) =>
-    product.node.variants.map(variant =>
-      productsContent.push({ product: index, variant })
+  useEffect(() => {
+    const selectedSortOption = sortOptions.filter(
+      sortOption => sortOption.current
+    )[0]
+    const sortedProducts = selectedSortOption.sort(data.products.edges)
+    const prvProductsContent = []
+    sortedProducts.map((product, index) =>
+      product.node.variants.map(variant =>
+        prvProductsContent.push({ product: index, variant })
+      )
     )
-  )
-
-  Object.keys(filterOptions)
-    .filter(option => filterOptions[option] !== null)
-    .map(option => {
-      filterOptions[option].forEach(value => {
-        if (value.checked) {
-          isFiltered = true
-          if (activeFilters[option] === undefined) {
-            activeFilters[option] = []
-          }
-          if (!activeFilters[option].includes(value)) {
-            activeFilters[option].push(value)
-          }
-          productsContent.forEach(item => {
-            if (option === 'Color') {
-              if (
-                item.variant.colorLabel === value.label.toLowerCase() &&
-                !filteredProducts.includes(item)
-              ) {
-                filteredProducts.push(item)
-              }
-            } else if (
-              item.variant[option.toLowerCase()] === value.label &&
-              !filteredProducts.includes(item)
-            ) {
-              filteredProducts.push(item)
-            }
-          })
-        }
-      })
-    })
-
-  Object.keys(activeFilters).forEach(filter => {
-    filteredProducts = filteredProducts.filter(item => {
-      let validFilteredProduct
-
-      activeFilters[filter].some(filterValue => {
-        if (filter === 'Color') {
-          if (item.variant.colorLabel === filterValue.label.toLowerCase()) {
-            validFilteredProduct = item
-          }
-        } else if (item.variant[filter.toLowerCase()] === filterValue.label) {
-          validFilteredProduct = item
-        }
-      })
-
-      return validFilteredProduct
-    })
-  })
-
-  if (isFiltered) {
-    productsContent = filteredProducts
-  }
-
-  const numberOfPages = Math.ceil(productsContent.length / productsPerPage)
+    setProductsContent(prvProductsContent)
+  }, [data.products.edges, sortOptions])
 
   useEffect(() => {
     if (page > 1) {
       setPage(1)
       setReset(true)
     }
-  }, [filterOptions])
+
+    let prvActiveFilters = {}
+    let prvFilteredProducts = []
+
+    setIsFiltered(false)
+
+    Object.keys(filterOptions)
+      .filter(option => filterOptions[option] !== null)
+      .map(option => {
+        filterOptions[option].forEach(value => {
+          if (value.checked) {
+            setIsFiltered(true)
+            if (prvActiveFilters[option] === undefined) {
+              prvActiveFilters[option] = []
+            }
+            if (!prvActiveFilters[option].includes(value)) {
+              prvActiveFilters[option].push(value)
+            }
+            productsContent.forEach(item => {
+              if (option === 'Color') {
+                if (
+                  item.variant.colorLabel === value.label.toLowerCase() &&
+                  !prvFilteredProducts.includes(item)
+                ) {
+                  prvFilteredProducts.push(item)
+                }
+              } else if (
+                item.variant[option.toLowerCase()] === value.label &&
+                !prvFilteredProducts.includes(item)
+              ) {
+                prvFilteredProducts.push(item)
+              }
+            })
+          }
+        })
+      })
+
+    Object.keys(prvActiveFilters).forEach(filter => {
+      prvFilteredProducts = prvFilteredProducts.filter(item => {
+        let validFilteredProduct
+
+        prvActiveFilters[filter].some(filterValue => {
+          if (filter === 'Color') {
+            if (item.variant.colorLabel === filterValue.label.toLowerCase()) {
+              validFilteredProduct = item
+            }
+          } else if (item.variant[filter.toLowerCase()] === filterValue.label) {
+            validFilteredProduct = item
+          }
+        })
+
+        return validFilteredProduct
+      })
+    })
+
+    setActiveFilters(prvActiveFilters)
+    setFilteredProducts(prvFilteredProducts)
+  }, [filterOptions, productsContent])
+
+  const productsPerPage = 8
+  let productsToRender = []
+
+  productsToRender = isFiltered ? filteredProducts : productsContent
+
+  const numberOfPages = Math.ceil(productsToRender.length / productsPerPage)
 
   return (
     <Layout>
       <main className="pb-24">
-        {JSON.stringify(page)}
         <DynamicToolbar
           filterOptions={filterOptions}
           setFilterOptions={setFilterOptions}
+          sortOptions={sortOptions}
+          setSortOptions={setSortOptions}
           name={pageContext.name}
           description={pageContext.description}
+          activeFilters={activeFilters}
+          setActiveFilters={setActiveFilters}
         />
         <LisOfProducts
           page={page}
           filterOptions={filterOptions}
           productsPerPage={productsPerPage}
           products={data.products.edges}
-          productsContent={productsContent}
+          productsContent={productsToRender}
         />
         <Pagination
           pageCount={numberOfPages}
@@ -123,6 +164,7 @@ export const query = graphql`
         node {
           strapiId
           name
+          createdAt
           category {
             name
           }
