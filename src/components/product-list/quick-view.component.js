@@ -4,6 +4,8 @@ import { XIcon } from '@heroicons/react/outline'
 
 import QuickViewProductCard from '../cards/quick-view-product-card.component'
 
+import { hasGender } from '../../utils/product'
+
 const QuickView = ({
   open,
   setOpen,
@@ -28,10 +30,6 @@ const QuickView = ({
 
   const [selectedSize, setSelectedSize] = useState(null)
   const [selectedColor, setSelectedColor] = useState(null)
-
-  const hasGender = product.node.variants.some(
-    variant => variant.gender !== null
-  )
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -97,7 +95,7 @@ const QuickView = ({
                     setSelectedColor={setSelectedColor}
                     product={product}
                     variant={variant}
-                    hasGender={hasGender}
+                    hasGender={hasGender(product)}
                   />
                 </div>
               </div>

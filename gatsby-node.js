@@ -80,19 +80,23 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
 
   const { products, categories } = graphQLRes.data
 
-  products.edges.forEach(({ node }) => {
+  products.edges.forEach(product => {
     createPage({
-      path: `/${node.category.name.toLowerCase()}/${slugify(node.name, {
-        lower: true,
-      })}`,
+      path: `/${product.node.category.name.toLowerCase()}/${slugify(
+        product.node.name,
+        {
+          lower: true,
+        }
+      )}`,
       component: require.resolve('./src/templates/product-detail.template.js'),
       context: {
-        name: node.name,
-        category: node.category.name,
-        specifications: node.specifications_json,
-        id: node.strapiId,
-        description: node.description,
-        variants: node.variants
+        name: product.node.name,
+        category: product.node.category.name,
+        specifications: product.node.specifications_json,
+        id: product.node.strapiId,
+        description: product.node.description,
+        variants: product.node.variants,
+        product
       },
     })
   })

@@ -5,3 +5,6 @@ export const colorIndex = (product, variant, color) => {
     )[0]
   )
 }
+
+export const hasGender = product =>
+  product.node.variants.some(variant => variant.gender !== null)

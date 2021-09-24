@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react'
 import Layout from '../components/layout/layout.component'
 import ProductImages from '../components/product-detail/product-images.component'
 import ProductInfo from '../components/product-detail/product-info.component'
+import RecentlyViewedProducts from '../components/product-detail/recently-viewed-products.component'
 
 const ProductDetail = ({ data, pageContext }) => {
-  const { id, name, category, description, variants, specifications } = pageContext
+  const { id, name, category, description, variants, specifications, product } =
+    pageContext
 
   const [selectedVariant, setSelectedVariant] = useState(0)
   const [selectedImage, setSelectedImage] = useState(0)
@@ -15,7 +17,35 @@ const ProductDetail = ({ data, pageContext }) => {
     const genderVariant = variants.filter(
       variant => variant.gender === params.get('gender')
     )[0]
-    setSelectedVariant(variants.indexOf(genderVariant))
+
+    const variantIndex = variants.indexOf(genderVariant)
+    let recentlyViewedProducts = JSON.parse(
+      localStorage.getItem('recentlyViewedProducts')
+    )
+    if (recentlyViewedProducts) {
+      if (recentlyViewedProducts.length === 4) {
+        recentlyViewedProducts.shift()
+      }
+      if (
+        !recentlyViewedProducts.some(
+          product =>
+            product.node.name === name &&
+            product.selectedVariant === variantIndex
+        )
+      ) {
+        recentlyViewedProducts.push({
+          ...product,
+          selectedVariant: variantIndex,
+        })
+      }
+    } else {
+      recentlyViewedProducts = [{ ...product, selectedVariant: variantIndex }]
+    }
+    localStorage.setItem(
+      'recentlyViewedProducts',
+      JSON.stringify(recentlyViewedProducts)
+    )
+    setSelectedVariant(variantIndex)
   }, [])
 
   return (
@@ -40,6 +70,12 @@ const ProductDetail = ({ data, pageContext }) => {
                 />
               </div>
             </div>
+
+            <RecentlyViewedProducts
+              products={JSON.parse(
+                localStorage.getItem('recentlyViewedProducts')
+              )}
+            />
           </div>
         </main>
       </div>
