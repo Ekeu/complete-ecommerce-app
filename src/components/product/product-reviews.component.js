@@ -2,7 +2,7 @@ import React from 'react'
 
 import Rating from '../rating/rating.component'
 
-const ProductReviews = ({ productRating, productName }) => {
+const ProductReviews = ({ productRating, productName, children }) => {
   return (
     <div className="mt-4">
       <h4 className="sr-only">Reviews</h4>
@@ -16,14 +16,7 @@ const ProductReviews = ({ productRating, productName }) => {
           productId={productName}
           customStyles={'ml-1 -mt-1'}
         />
-        <div className="hidden ml-4 lg:flex lg:items-center">
-          <span className="text-blue-gray-300" aria-hidden="true">
-            &middot;
-          </span>
-          <span className="ml-4 text-sm font-semibold font-osans text-purple-600 hover:text-purple-500">
-            12 articles left
-          </span>
-        </div>
+        {children}
       </div>
     </div>
   )

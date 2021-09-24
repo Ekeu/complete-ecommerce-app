@@ -17,15 +17,22 @@ const QuickView = ({
 }) => {
   const productSizes = []
   const productColors = []
-  product.node.variants.forEach(variant => {
-    productSizes.push(variant.size)
-    if (!productColors.includes(variant.color)) {
-      productColors.push(variant.color)
+  product.node.variants.forEach(item => {
+    if (item.gender === variant.gender) {
+      productSizes.push(item.size)
+      if (!productColors.includes(item.color)) {
+        productColors.push(item.color)
+      }
     }
   })
 
   const [selectedSize, setSelectedSize] = useState(null)
   const [selectedColor, setSelectedColor] = useState(null)
+
+  const hasGender = product.node.variants.some(
+    variant => variant.gender !== null
+  )
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -90,6 +97,7 @@ const QuickView = ({
                     setSelectedColor={setSelectedColor}
                     product={product}
                     variant={variant}
+                    hasGender={hasGender}
                   />
                 </div>
               </div>

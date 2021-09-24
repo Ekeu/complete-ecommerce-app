@@ -29,7 +29,7 @@ const ProductSizes = ({ productSizes, selectedSize, setSelectedSize }) => {
         <div className="grid grid-cols-7 gap-2">
           {productSizes.map(size => (
             <RadioGroup.Option
-              key={size.name}
+              key={`${size.name}-${Math.random()}`}
               value={size.name}
               className={({ active, checked }) =>
                 classNames(

@@ -15,8 +15,29 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
           node {
             name
             strapiId
+            description
             category {
               name
+            }
+            specifications_json {
+              details {
+                items
+                name
+              }
+            }
+            variants {
+              id
+              color
+              size
+              style
+              price
+              gender
+              images {
+                id
+                name
+                url
+                alternativeText
+              }
             }
           }
         }
@@ -68,7 +89,10 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
       context: {
         name: node.name,
         category: node.category.name,
+        specifications: node.specifications_json,
         id: node.strapiId,
+        description: node.description,
+        variants: node.variants
       },
     })
   })

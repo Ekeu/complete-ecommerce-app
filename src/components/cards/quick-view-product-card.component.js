@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 
 import { currencyFormatter, createSlug } from '../../utils/functions'
+import { colorIndex } from '../../utils/product'
 
 import ProductReviews from '../product/product-reviews.component'
 import ProductSizes from '../product/product-sizes.component'
@@ -13,6 +14,7 @@ const QuickViewProductCard = ({
   imageALT,
   product,
   variant,
+  hasGender,
   productName,
   productPrice,
   productRating,
@@ -28,16 +30,12 @@ const QuickViewProductCard = ({
     .filter(size => new Set(productSizes).has(size))
     .map(size => ({ name: size, inStock: true }))
 
-  const colorIndex = product.node.variants.indexOf(
-    product.node.variants.filter(
-      item => item.color === selectedColor && variant.gender === item.gender
-    )[0]
-  )
+  const imageIndex = colorIndex(product, variant, selectedColor)
 
   const selectedColorImageURL =
-    colorIndex !== -1
+    imageIndex !== -1
       ? process.env.GATSBY_STRAPI_URL +
-        product.node.variants[colorIndex].images[0].url
+        product.node.variants[imageIndex].images[0].url
       : imageURL
 
   return (
@@ -48,6 +46,21 @@ const QuickViewProductCard = ({
           alt={imageALT}
           className="object-center object-cover"
         />
+        <div
+          className="flex items-end p-4 group-hover:opacity-100 sm:hidden"
+          aria-hidden="true"
+        >
+          <Link
+            to={`/${product.node.category.name.toLowerCase()}/${createSlug(
+              product.node.name
+            )}${hasGender && `?gender=${variant.gender}`}`}
+            className={
+              'w-full bg-white bg-opacity-75 backdrop-filter backdrop-blur py-2 px-4 rounded-md text-sm font-medium font-hind text-blue-gray-800 text-center'
+            }
+          >
+            View full details
+          </Link>
+        </div>
       </div>
       <div className="sm:col-span-8 lg:col-span-7">
         <h2 className="text-xl font-medium font-hind text-blue-gray-800 sm:pr-12">
@@ -65,7 +78,16 @@ const QuickViewProductCard = ({
           <ProductReviews
             productRating={productRating}
             productName={productName}
-          />
+          >
+            <div className="hidden ml-4 lg:flex lg:items-center">
+              <span className="text-blue-gray-300" aria-hidden="true">
+                &middot;
+              </span>
+              <span className="ml-4 text-sm font-semibold font-osans text-purple-600 hover:text-purple-500">
+                12 articles left
+              </span>
+            </div>
+          </ProductReviews>
         </section>
 
         <section aria-labelledby="options-heading" className="mt-8">
@@ -73,7 +95,7 @@ const QuickViewProductCard = ({
             Product options
           </h3>
 
-          <form>
+          <div>
             <ProductColors
               productColors={productColors}
               selectedColor={selectedColor}
@@ -87,7 +109,7 @@ const QuickViewProductCard = ({
             <CustomButton
               type={'submit'}
               customStyles={
-                'mt-8 bg-purple-600 border-transparent py-3 px-8 flex items-center text-white hover:bg-purple-700'
+                'mt-8 bg-purple-600 border-transparent py-3 px-8 flex items-center text-white hover:bg-purple-700 w-full'
               }
             >
               Add to bag
@@ -96,13 +118,13 @@ const QuickViewProductCard = ({
               <Link
                 to={`/${product.node.category.name.toLowerCase()}/${createSlug(
                   product.node.name
-                )}`}
+                )}${hasGender && `?gender=${variant.gender}`}`}
                 className="font-medium font-hind text-purple-600 hover:text-purple-500"
               >
                 View full details
               </Link>
             </p>
-          </form>
+          </div>
         </section>
       </div>
     </>

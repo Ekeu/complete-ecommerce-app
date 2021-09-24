@@ -114,7 +114,7 @@ const ContactForm = () => {
         <CustomButton
           type={'submit'}
           customStyles={
-            'mt-2 items-center flex px-6 py-3 sm:w-auto border-transparent text-white bg-purple-500 hover:bg-purple-600'
+            'mt-2 items-center flex px-6 py-3 sm:w-auto border-transparent text-white bg-purple-500 hover:bg-purple-600 w-full'
           }
         >
           Submit

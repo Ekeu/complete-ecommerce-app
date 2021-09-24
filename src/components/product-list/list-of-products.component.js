@@ -3,8 +3,12 @@ import React from 'react'
 import ListOfProductsGrid from './list-of-products-grid.component'
 import ProductCard from '../cards/product-card.component'
 
-const LisOfProducts = ({ products, productsContent, page, productsPerPage }) => {
-
+const LisOfProducts = ({
+  products,
+  productsContent,
+  page,
+  productsPerPage,
+}) => {
   return (
     <ListOfProductsGrid>
       {productsContent
