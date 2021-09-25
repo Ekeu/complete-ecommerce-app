@@ -11,7 +11,7 @@ const CustomLink = ({ link, customStyles, children, type, ...otherProps }) => {
         to={link}
         {...otherProps}
         className={`${
-          location.pathname === link
+          `/${location.pathname.split('/')[1]}` === link
             ? 'border-purple-500 text-blue-gray-800'
             : 'border-transparent text-blue-gray-500 hover:border-blue-gray-300 hover:text-blue-gray-700'
         } capitalize text-sm font-hind font-medium border-b-2 ${customStyles}`}
@@ -25,7 +25,7 @@ const CustomLink = ({ link, customStyles, children, type, ...otherProps }) => {
         to={link}
         {...otherProps}
         className={`${
-          location.pathname === link
+          `/${location.pathname.split('/')[1]}` === link
             ? 'bg-purple-50 border-purple-500 text-purple-700'
             : 'border-transparent text-blue-gray-500 hover:bg-blue-gray-50 hover:border-blue-gray-300 hover:text-blue-gray-700'
         } -m-2 p-2 block font-hind border-l-4 font-medium ${customStyles}`}

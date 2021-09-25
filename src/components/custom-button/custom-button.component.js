@@ -18,8 +18,8 @@ const CustomButton = forwardRef(
       className={`${
         customStyles
           ? customStyles
-          : 'py-2 px-5 border-transparent text-white bg-purple-500 hover:bg-purple-600'
-      } w-full inline-flex justify-center border rounded-md shadow-sm text-base font-medium focus:outline-none`}
+          : 'py-2 px-5 border-transparent text-white bg-purple-500 hover:bg-purple-600 w-full'
+      } justify-center border rounded-md shadow-sm text-base font-medium font-hind focus:outline-none`}
     >
       {loading ? <Spinner size={'h-5 w-5'} color={'text-white'} /> : children}
     </button>

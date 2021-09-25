@@ -1,9 +1,9 @@
 import React from 'react'
 import StarRatings from 'react-star-ratings'
 
-const Rating = ({ rating, productId }) => {
+const Rating = ({ rating, productId, customStyles }) => {
   return (
-    <div className={'mt-1 flex items-center'}>
+    <div className={`${customStyles} flex items-center`}>
       <StarRatings
         name={productId}
         numberOfStars={5}
