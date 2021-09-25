@@ -1,7 +1,3 @@
-/**
- * Implement Gatsby's SSR (Server Side Rendering) APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/ssr-apis/
- */
+import RootWrapper from './src/components/root-wrapper.component'
 
-// You can delete this file if you're not using it
+export const wrapRootElement = RootWrapper

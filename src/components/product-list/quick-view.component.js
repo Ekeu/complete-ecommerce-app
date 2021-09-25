@@ -1,6 +1,9 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
+import { useQuery } from '@apollo/client'
+
+import { GET_INVENTORY_DETAILS } from '../../apollo/queries'
 
 import QuickViewProductCard from '../cards/quick-view-product-card.component'
 
@@ -19,17 +22,43 @@ const QuickView = ({
 }) => {
   const productSizes = []
   const productColors = []
+
+  const [selectedSize, setSelectedSize] = useState(variant.size)
+  const [selectedColor, setSelectedColor] = useState(null)
+  const [selectedVariant, setSelectedVariant] = useState(null)
+  const [stock, setStock] = useState(null)
+
+  const { loading, error, data } = useQuery(GET_INVENTORY_DETAILS, {
+    variables: { id: product.node.strapiId },
+  })
+
   product.node.variants.forEach(item => {
     if (item.gender === variant.gender) {
       productSizes.push(item.size)
-      if (!productColors.includes(item.color)) {
+      if (!productColors.includes(item.color) && item.size === selectedSize) {
         productColors.push(item.color)
       }
     }
   })
 
-  const [selectedSize, setSelectedSize] = useState(null)
-  const [selectedColor, setSelectedColor] = useState(null)
+  useEffect(() => {
+    if (error) {
+      setStock(-1)
+    } else if (data) {
+      setStock(data.product.variants)
+    }
+  }, [error, data])
+
+  useEffect(() => {
+    setSelectedColor(null)
+    const newVariant = product.node.variants.find(
+      item =>
+        item.size === selectedSize &&
+        item.gender === variant.gender &&
+        item.color === productColors[0]
+    )
+    setSelectedVariant(newVariant)
+  }, [selectedSize])
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -94,7 +123,8 @@ const QuickView = ({
                     selectedColor={selectedColor}
                     setSelectedColor={setSelectedColor}
                     product={product}
-                    variant={variant}
+                    variant={selectedVariant || variant}
+                    stock={stock}
                     hasGender={hasGender(product)}
                   />
                 </div>

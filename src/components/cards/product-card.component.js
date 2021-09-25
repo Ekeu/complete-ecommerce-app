@@ -8,7 +8,7 @@ const ProductCard = ({ product, variant }) => {
   const [open, setOpen] = useState(false)
 
   const imageURL = process.env.GATSBY_STRAPI_URL + variant.images[0].url
-  const productName= product.node.name
+  const productName = product.node.name
   return (
     <>
       <div
@@ -37,11 +37,7 @@ const ProductCard = ({ product, variant }) => {
           </h3>
           <div className="mt-3 flex flex-col items-center">
             <p className="sr-only">4 out of 5 stars</p>
-            <Rating
-              rating={4}
-              productId={productName}
-              customStyles={'mt-1'}
-            />
+            <Rating rating={4} productId={productName} customStyles={'mt-1'} />
             <p className="mt-1 text-sm text-blue-gray-500">4 reviews</p>
           </div>
           <p className="mt-4 text-base font-medium text-blue-gray-900">

@@ -3,21 +3,24 @@ import { RadioGroup } from '@headlessui/react'
 
 import { classNames } from '../../utils/functions'
 
-const ProductSizes = ({ productSizes, selectedSize, setSelectedSize }) => {
+const ProductSizes = ({
+  productSizes,
+  selectedSize,
+  setSelectedSize,
+  stockDisplay,
+  quantity,
+}) => {
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between">
         <h4 className="text-sm font-medium text-blue-gray-800">Size</h4>
-        <a
-          rel={'noreferrer'}
-          target={'_blank'}
-          href={'https://www.adidas.com.my/en/help-topics-size_charts.html'}
-          className={
-            'text-sm font-medium text-purple-600 hover:text-purple-500'
-          }
+        <span
+          className={`text-sm font-medium ${
+            quantity === 0 ? 'text-red-600' : 'text-purple-600'
+          }`}
         >
-          Size guide
-        </a>
+          {stockDisplay}
+        </span>
       </div>
 
       <RadioGroup
@@ -33,9 +36,7 @@ const ProductSizes = ({ productSizes, selectedSize, setSelectedSize }) => {
               value={size.name}
               className={({ active, checked }) =>
                 classNames(
-                  size.inStock
-                    ? 'cursor-pointer focus:outline-none'
-                    : 'opacity-25 cursor-not-allowed',
+                  'cursor-pointer focus:outline-none',
                   active ? 'ring-2 ring-offset-2 ring-purple-500' : '',
                   checked
                     ? 'bg-purple-600 border-transparent text-white hover:bg-purple-700'
@@ -43,7 +44,6 @@ const ProductSizes = ({ productSizes, selectedSize, setSelectedSize }) => {
                   'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1'
                 )
               }
-              disabled={!size.inStock}
             >
               <RadioGroup.Label as="p">{size.name}</RadioGroup.Label>
             </RadioGroup.Option>

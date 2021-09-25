@@ -9,6 +9,7 @@ const LisOfProducts = ({
   page,
   productsPerPage,
 }) => {
+
   return (
     <ListOfProductsGrid>
       {productsContent

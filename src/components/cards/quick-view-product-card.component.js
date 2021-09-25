@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'gatsby'
 
 import { currencyFormatter, createSlug } from '../../utils/functions'
 import { colorIndex } from '../../utils/product'
 
+import { getStockDisplay } from '../product-detail/product-info.component'
 import ProductReviews from '../product/product-reviews.component'
 import ProductSizes from '../product/product-sizes.component'
 import ProductColors from '../product/product-colors.component'
@@ -14,6 +15,7 @@ const QuickViewProductCard = ({
   imageALT,
   product,
   variant,
+  stock,
   hasGender,
   productName,
   productPrice,
@@ -37,6 +39,13 @@ const QuickViewProductCard = ({
       ? process.env.GATSBY_STRAPI_URL +
         product.node.variants[imageIndex].images[0].url
       : imageURL
+
+  const selectedVariant =
+    imageIndex === -1 ? product.node.variants.indexOf(variant) : imageIndex
+
+  const stockDisplay = getStockDisplay(stock, selectedVariant)
+
+  const [pdtQty, setPdtQty] = useState(1)
 
   return (
     <>
@@ -84,7 +93,7 @@ const QuickViewProductCard = ({
                 &middot;
               </span>
               <span className="ml-4 text-sm font-semibold font-osans text-purple-600 hover:text-purple-500">
-                12 articles left
+                Leave a review
               </span>
             </div>
           </ProductReviews>
@@ -105,6 +114,8 @@ const QuickViewProductCard = ({
               productSizes={actualSizes}
               selectedSize={selectedSize}
               setSelectedSize={setSelectedSize}
+              stockDisplay={stockDisplay}
+              quantity={stock && stock[selectedVariant].quantity}
             />
             <CustomButton
               type={'submit'}

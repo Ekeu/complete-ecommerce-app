@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from 'react'
+import { useQuery } from '@apollo/client'
 
 import Layout from '../components/layout/layout.component'
 import ProductImages from '../components/product-detail/product-images.component'
 import ProductInfo from '../components/product-detail/product-info.component'
 import RecentlyViewedProducts from '../components/product-detail/recently-viewed-products.component'
 
-const ProductDetail = ({ data, pageContext }) => {
-  const { id, name, category, description, variants, specifications, product } =
+import { GET_INVENTORY_DETAILS } from '../apollo/queries'
+
+
+const ProductDetail = ({ pageContext }) => {
+  const { id, name, description, variants, specifications, product } =
     pageContext
 
   const [selectedVariant, setSelectedVariant] = useState(0)
   const [selectedImage, setSelectedImage] = useState(0)
+  const [stock, setStock] = useState(null)
+
+  const { loading, error, data } = useQuery(GET_INVENTORY_DETAILS, {
+    variables: { id }
+  })
+
+  useEffect(() => {
+    if (error) {
+      setStock(-1)
+    } else if (data) {
+      setStock(data.product.variants)
+    }
+  }, [error, data])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -67,6 +84,7 @@ const ProductDetail = ({ data, pageContext }) => {
                   specifications={specifications}
                   selectedVariant={selectedVariant}
                   setSelectedVariant={setSelectedVariant}
+                  stock={stock}
                 />
               </div>
             </div>

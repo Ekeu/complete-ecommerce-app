@@ -9,8 +9,25 @@ import ProductColors from '../product/product-colors.component'
 import ProductSizes from '../product/product-sizes.component'
 import ProductDetails from './product-details.component'
 
+export const getStockDisplay = (stock, variant) => {
+  switch (stock) {
+    case undefined:
+    case null:
+      return 'Loading...'
+    case -1:
+      return 'Error loading inventory.'
+    default:
+      if (stock[variant].quantity === 0) {
+        return 'Out of stock!'
+      } else {
+        return `${stock[variant].quantity} left in stock.`
+      }
+  }
+}
+
 const ProductInfo = ({
   name,
+  stock,
   description,
   variants,
   specifications,
@@ -18,7 +35,9 @@ const ProductInfo = ({
   setSelectedVariant,
 }) => {
   const [selectedColor, setSelectedColor] = useState(null)
-  const [selectedSize, setSelectedSize] = useState(null)
+  const [selectedSize, setSelectedSize] = useState(
+    variants[selectedVariant].size
+  )
 
   const imageIndex = colorIndex(
     { node: { variants } },
@@ -29,20 +48,33 @@ const ProductInfo = ({
   const sizes = []
   const colors = []
 
-  variants.forEach(item => {
-    if (item.gender === variants[selectedVariant].gender) {
-      sizes.push({ name: item.size, inStock: true })
-      if (!colors.includes(item.color)) {
-        colors.push(item.color)
+  variants.forEach(variant => {
+    if (variant.gender === variants[selectedVariant].gender) {
+      sizes.push({ name: variant.size })
+      if (!colors.includes(variant.color) && variant.size === selectedSize) {
+        colors.push(variant.color)
       }
     }
   })
+
+  useEffect(() => {
+    setSelectedColor(null)
+    const newVariant = variants.find(
+      variant =>
+        variant.size === selectedSize &&
+        variant.gender === variants[selectedVariant].gender &&
+        variant.color === colors[0]
+    )
+    setSelectedVariant(variants.indexOf(newVariant))
+  }, [selectedSize])
 
   useEffect(() => {
     if (imageIndex !== -1) {
       setSelectedVariant(imageIndex)
     }
   }, [imageIndex])
+
+  const stockDisplay = getStockDisplay(stock, selectedVariant)
 
   return (
     <>
@@ -92,10 +124,12 @@ const ProductInfo = ({
             productSizes={sizes}
             selectedSize={selectedSize}
             setSelectedSize={setSelectedSize}
+            stockDisplay={stockDisplay}
+            quantity={stock && stock[selectedVariant].quantity}
           />
         </div>
       </div>
-      <ProductActionButtons />
+      <ProductActionButtons stock={stock} selectedVariant={selectedVariant} />
       <ProductDetails details={specifications.details} />
     </>
   )
