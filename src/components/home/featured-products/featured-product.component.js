@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'gatsby'
 
 import PromoFeaturedCard from '../../cards/promo-featured-card.component'
 
 const FeaturedProduct = ({ product }) => {
   return (
-    <div className="group relative">
+    <Link to={product.href} className="group relative">
       <PromoFeaturedCard
         imageSrc={product.imageSrc}
         imageAlt={product.imageAlt}
@@ -15,7 +16,7 @@ const FeaturedProduct = ({ product }) => {
         }
         rating={4}
       />
-    </div>
+    </Link>
   )
 }
 

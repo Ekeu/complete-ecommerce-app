@@ -27,12 +27,11 @@ const Header = ({ categories }) => {
       <header className="relative">
         <nav aria-label="Top">
           <TopNavigation />
-          {/* Secondary navigation */}
           <div className="bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="border-b border-white">
                 <div className="h-16 flex items-center justify-between">
-                  {/* Logo (lg+) */}
+
                   <div className="hidden lg:flex lg:items-center">
                     <Link to={'/'}>
                       <span className="sr-only">Adidas</span>
@@ -57,7 +56,6 @@ const Header = ({ categories }) => {
                     </div>
                   </div>
 
-                  {/* Mobile menu and search (lg-) */}
                   <div className="flex-1 flex items-center lg:hidden">
                     <button
                       type="button"
@@ -68,7 +66,6 @@ const Header = ({ categories }) => {
                       <MenuIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
 
-                    {/* Search */}
                     <a
                       href="#"
                       className="ml-2 p-2 text-blue-gray-400 hover:text-blue-gray-500"
@@ -78,7 +75,6 @@ const Header = ({ categories }) => {
                     </a>
                   </div>
 
-                  {/* Logo (lg-) */}
                   <Link to={'/'} className="lg:hidden">
                     <span className="sr-only">Adidas</span>
                     <img src={Logo} alt={'Adidas'} className="h-8 w-auto" />
