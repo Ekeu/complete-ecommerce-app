@@ -1,18 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Image } from 'cloudinary-react'
 
 import AuthLogin from './auth-login.component'
 import AuthSignup from './auth-signup.component'
 import AuthComplete from './auth-complete.component'
+import AuthReset from './auth-reset.component'
+
+import { UserContext, FeedbackContext } from '../../contexts'
 
 const AuthPortal = () => {
   const [currentComponent, setCurrentComponent] = useState(0)
+  const { user, dispatch } = useContext(UserContext)
+  const { feedback, dispatch: dispatchFeedback } = useContext(FeedbackContext)
 
   const components = [
     { cpt: AuthLogin, label: 'Login' },
     { cpt: AuthSignup, label: 'Sign Up' },
     { cpt: AuthComplete, label: 'Complete' },
+    { cpt: AuthReset, label: 'Reset' },
   ]
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('code')
+
+    if (code) {
+      const resetComponent = components.find(component => component.label === 'Reset')
+      setCurrentComponent(components.indexOf(resetComponent))
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-white flex">
@@ -23,6 +39,10 @@ const AuthPortal = () => {
               currentComponent === index && (
                 <component.cpt
                   key={component.label}
+                  user={user}
+                  feedback={feedback}
+                  dispatch={dispatch}
+                  dispatchFeedback={dispatchFeedback}
                   setCurrentComponent={setCurrentComponent}
                   components={components}
                 />

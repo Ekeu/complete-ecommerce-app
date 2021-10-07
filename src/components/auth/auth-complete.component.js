@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ArrowNarrowRightIcon } from '@heroicons/react/solid'
+
+import { setUser } from '../../contexts/actions'
 
 import CustomButton from '../custom-button/custom-button.component'
 import { AUTH_COMPLETE_SVG } from '../../constants/auth.constants'
 
-const AuthComplete = () => {
+const AuthComplete = ({ user, dispatch }) => {
+
+  useEffect(() => {
+    return () => {
+      dispatch(setUser({...user, onboarding: true}))
+    }
+  }, [])
+
   return (
     <div className="text-center">
       {AUTH_COMPLETE_SVG}

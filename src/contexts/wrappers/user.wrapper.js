@@ -1,22 +1,42 @@
-import React, { useReducer, createContext } from 'react'
+import React, { useReducer, createContext, useEffect } from 'react'
+import axios from 'axios'
 
-import setUserReducer from '../reducers/user.reducers'
-
-import { setUser } from '../actions/user.actions'
+import { userReducer } from '../reducers/user.reducers'
+import { setUser } from '../actions'
 
 export const UserContext = createContext()
 
 const UserProvider = UserContext.Provider
 
-const UserWrapper = ({ children }) => {
+export const UserWrapper = ({ children }) => {
   const defaultUser = { username: 'Guest User' }
-  const [user, dispatchUser] = useReducer(setUserReducer, defaultUser)
+  const storedUser = JSON.parse(localStorage.getItem('user'))
+  const [user, dispatch] = useReducer(userReducer, storedUser || defaultUser)
 
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      try {
+        const res = await axios.get(
+          process.env.GATSBY_STRAPI_URL + '/users/me',
+          {
+            headers: {
+              Authorization: `Bearer ${storedUser.jwt}`,
+            },
+          }
+        )
+        dispatch(setUser({ ...res.data, jwt: storedUser.jwt, onboarding: true }))
+      } catch (error) {
+        console.error(error)
+        dispatch(setUser(defaultUser))
+      }
+    }
+    if (storedUser) {
+      checkUserStatus()
+    }
+  }, [])
   return (
-    <UserProvider value={{ user, dispatchUser, defaultUser }}>
+    <UserProvider value={{ user, dispatch, defaultUser }}>
       {children}
     </UserProvider>
   )
 }
-
-export default UserWrapper

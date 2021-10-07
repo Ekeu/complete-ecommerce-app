@@ -7,10 +7,18 @@ import AuthSocials from './auth-socials.component'
 import FormInput from '../form-input/form-input.component'
 import CustomButton from '../custom-button/custom-button.component'
 
+import { setUser, setSnackbar } from '../../contexts/actions'
+
 import { PASSWORD_CONFIG, EMAIL_CONFIG } from '../../constants/auth.constants'
 
-const AuthSignup = ({ components, setCurrentComponent }) => {
+const AuthSignup = ({
+  components,
+  setCurrentComponent,
+  dispatch,
+  dispatchFeedback,
+}) => {
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const {
     register,
@@ -20,6 +28,7 @@ const AuthSignup = ({ components, setCurrentComponent }) => {
 
   const onSubmit = handleSubmit(async ({ name, email, password }) => {
     try {
+      setLoading(true)
       const res = await axios.post(
         process.env.GATSBY_STRAPI_URL + '/auth/local/register',
         {
@@ -28,14 +37,17 @@ const AuthSignup = ({ components, setCurrentComponent }) => {
           password,
         }
       )
-      console.log(res.data)
+      setLoading(false)
+      dispatch(setUser({ ...res.data.user, jwt: res.data.jwt }))
 
       const completeComponent = components.find(
         component => component.label === 'Complete'
       )
       setCurrentComponent(components.indexOf(completeComponent))
     } catch (error) {
-      console.error(error)
+      const { message } = error.response.data.message[0].messages[0]
+      setLoading(false)
+      dispatchFeedback(setSnackbar({ status: 'error', message }))
     }
   })
 
@@ -112,6 +124,7 @@ const AuthSignup = ({ components, setCurrentComponent }) => {
             <div>
               <CustomButton
                 type={'submit'}
+                loading={loading}
                 customStyles={
                   'w-full flex justify-center py-2 px-5 border-transparent text-white bg-purple-600 hover:bg-purple-700'
                 }

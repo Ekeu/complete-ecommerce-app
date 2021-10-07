@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
 
@@ -7,11 +7,20 @@ import AuthSocials from './auth-socials.component'
 import FormInput from '../form-input/form-input.component'
 import CustomButton from '../custom-button/custom-button.component'
 
-import { PASSWORD_CONFIG, EMAIL_CONFIG } from '../../constants/auth.constants'
+import { EMAIL_CONFIG } from '../../constants/auth.constants'
 
-const AuthLogin = ({ components, setCurrentComponent }) => {
+import { setUser, setSnackbar } from '../../contexts/actions'
+
+const AuthLogin = ({
+  components,
+  setCurrentComponent,
+  dispatch,
+  dispatchFeedback,
+}) => {
   const [showPassword, setShowPassword] = useState(false)
   const [forgot, setForgot] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess]= useState(false)
 
   const {
     register,
@@ -19,18 +28,45 @@ const AuthLogin = ({ components, setCurrentComponent }) => {
     handleSubmit,
   } = useForm()
 
+  useEffect(() => {
+    if (!success) return
+    const timer = setTimeout(() => setForgot(false), 6000)
+
+    return () => clearTimeout(timer)
+  }, [success])
+
   const onSubmit = handleSubmit(async ({ email, password }) => {
     try {
-      const res = await axios.post(
-        process.env.GATSBY_STRAPI_URL + '/auth/local',
-        {
-          identifier: email,
-          password,
-        }
-      )
-      console.log(res.data)
+      setLoading(true)
+      if (forgot) {
+        await axios.post(
+          process.env.GATSBY_STRAPI_URL + '/auth/forgot-password',
+          {
+            email,
+          }
+        )
+        setLoading(false)
+        dispatchFeedback(
+          setSnackbar({ status: 'success', message: 'Reset code sent!' })
+        )
+      } else {
+        const res = await axios.post(
+          process.env.GATSBY_STRAPI_URL + '/auth/local',
+          {
+            identifier: email,
+            password,
+          }
+        )
+        setLoading(false)
+        setSuccess(true)
+        dispatch(
+          setUser({ ...res.data.user, jwt: res.data.jwt, onboarding: true })
+        )
+      }
     } catch (error) {
-      console.error(error)
+      const { message } = error.response.data.message[0].messages[0]
+      setLoading(false)
+      dispatchFeedback(setSnackbar({ status: 'error', message }))
     }
   })
 
@@ -108,7 +144,7 @@ const AuthLogin = ({ components, setCurrentComponent }) => {
             <div>
               <CustomButton
                 type={'submit'}
-                loading={false}
+                loading={loading}
                 customStyles={
                   'w-full flex justify-center py-2 px-5 border-transparent text-white bg-purple-600 hover:bg-purple-700'
                 }
