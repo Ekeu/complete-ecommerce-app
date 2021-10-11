@@ -14,7 +14,7 @@ const CustomButton = forwardRef(
         cursor: loading || disabled ? 'not-allowed' : undefined,
         ...style,
       }}
-      disabled={disabled}
+      disabled={loading || disabled}
       className={`${
         customStyles
           ? customStyles

@@ -11,6 +11,8 @@ import { EMAIL_CONFIG } from '../../constants/auth.constants'
 
 import { setUser, setSnackbar } from '../../contexts/actions'
 
+import { handleSocialAuth } from '../../utils/auth'
+
 const AuthLogin = ({
   components,
   setCurrentComponent,
@@ -20,7 +22,7 @@ const AuthLogin = ({
   const [showPassword, setShowPassword] = useState(false)
   const [forgot, setForgot] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess]= useState(false)
+  const [success, setSuccess] = useState(false)
 
   const {
     register,
@@ -91,7 +93,14 @@ const AuthLogin = ({
         handleChange={forgot ? () => setForgot(false) : navigateToSignup}
       />
       <div className="mt-8">
-        {!forgot && <AuthSocials headline={'Log in with'} />}
+        {!forgot && (
+          <AuthSocials
+            loading={loading}
+            headline={'Sign in with'}
+            init
+            handleSocialAuth={handleSocialAuth}
+          />
+        )}
         <div className="mt-6">
           <form onSubmit={onSubmit} className="space-y-6">
             <FormInput

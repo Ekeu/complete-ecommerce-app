@@ -17,6 +17,31 @@ export const EMAIL_CONFIG = {
   },
 }
 
+export const PHONE_CONFIG = {
+  required: 'Enter your phone number',
+  pattern: {
+    value:
+      /^((?:\+|00)[17](?: |\-)?|(?:\+|00)[1-9]\d{0,2}(?: |\-)?|(?:\+|00)1\-\d{3}(?: |\-)?)?(0\d|\([0-9]{3}\)|[1-9]{0,3})(?:((?: |\-)[0-9]{2}){4}|((?:[0-9]{2}){4})|((?: |\-)[0-9]{3}(?: |\-)[0-9]{4})|([0-9]{7}))$/,
+    message: 'Please enter a valid phone number',
+  },
+}
+
+export const ZIP_CONFIG = {
+  required: 'Enter your ZIP code',
+  pattern: {
+    value: /^\d{5}(-\d{4})?$/,
+    message: 'Please enter a valid ZIP code',
+  },
+}
+export const STREET_CONFIG = {
+  required: 'Enter your street address',
+  pattern: {
+    value:
+      /^(\d+) ?([A-Za-z](?=))? (.*?) ([^ ]+?) ?((?<= )APT)? ?((?<= )\d*)?$/,
+    message: 'Please enter a valid street address',
+  },
+}
+
 export const AUTH_COMPLETE_SVG = (
   <svg
     className="mx-auto h-24 w-24 text-purple-500"

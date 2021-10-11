@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Image } from 'cloudinary-react'
+import axios from 'axios'
 
 import AuthLogin from './auth-login.component'
 import AuthSignup from './auth-signup.component'
@@ -7,6 +8,9 @@ import AuthComplete from './auth-complete.component'
 import AuthReset from './auth-reset.component'
 
 import { UserContext, FeedbackContext } from '../../contexts'
+import { setUser, setSnackbar } from '../../contexts/actions'
+
+import { capitalize } from '../../utils/functions'
 
 const AuthPortal = () => {
   const [currentComponent, setCurrentComponent] = useState(0)
@@ -23,10 +27,42 @@ const AuthPortal = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const code = params.get('code')
+    const access_token = params.get('access_token')
+    const access_secret = params.get('access_secret')
 
     if (code) {
-      const resetComponent = components.find(component => component.label === 'Reset')
+      const resetComponent = components.find(
+        component => component.label === 'Reset'
+      )
       setCurrentComponent(components.indexOf(resetComponent))
+    } else if (access_token) {
+      const provider = localStorage.getItem('requestedProvider')
+      axios
+        .get(process.env.GATSBY_STRAPI_URL + `/auth/${provider}/callback`, {
+          params: {
+            access_token,
+            access_secret,
+          },
+        })
+        .then(res => {
+          dispatch(
+            setUser({ ...res.data.user, jwt: res.data.jwt, onboarding: true })
+          )
+          localStorage.removeItem('requestedProvider')
+          window.history.replaceState(null, null, window.location.pathname)
+        })
+        .catch(error => {
+          console.error(error)
+          localStorage.removeItem('requestedProvider')
+          dispatchFeedback(
+            setSnackbar({
+              status: 'error',
+              message: `Connecting to ${capitalize(
+                provider
+              )} failed, please try again`,
+            })
+          )
+        })
     }
   }, [])
 

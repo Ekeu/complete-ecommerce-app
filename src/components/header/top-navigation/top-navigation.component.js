@@ -2,9 +2,14 @@ import React, { useContext } from 'react'
 import { Link } from 'gatsby'
 
 import { UserContext } from '../../../contexts'
+import { setUser } from '../../../contexts/actions'
 
 const TopNavigation = () => {
-  const { user } = useContext(UserContext)
+  const { user, dispatch, defaultUser } = useContext(UserContext)
+
+  const handleLogout = () => {
+    dispatch(setUser(defaultUser))
+  }
   return (
     <div className="hidden bg-gradient-to-br from-purple-500 to-indigo-500 lg:block">
       <div className="max-w-7xl mx-auto h-10 px-4 flex items-center justify-between sm:px-6 lg:px-8">
@@ -25,13 +30,18 @@ const TopNavigation = () => {
               'text-sm font-hind font-medium text-white hover:text-blue-gray-100'
             }
           >
-            {user.jwt ? <>✌</> : <>👉</>}
+            {user.jwt ? `Welcome, ${user.username}` : <>👉</>}
           </span>
           <span className="h-6 w-px bg-white" aria-hidden="true" />
           {user.jwt ? (
-            <p className={'text-sm font-hind font-medium text-white'}>
-              Welcome {user.username}
-            </p>
+            <button
+              onClick={handleLogout}
+              className={
+                'text-sm font-hind font-medium text-white cursor-pointer'
+              }
+            >
+              Log out
+            </button>
           ) : (
             <Link
               to={'/account'}

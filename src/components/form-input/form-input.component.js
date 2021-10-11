@@ -5,6 +5,8 @@ import {
   EyeOffIcon,
 } from '@heroicons/react/solid'
 
+import Spinner from '../spinner/spinner.component'
+
 const FormInput = forwardRef(
   (
     {
@@ -17,6 +19,7 @@ const FormInput = forwardRef(
       error,
       errorTextColor,
       loadingActionButton,
+      disabledActionButton,
       register,
       ringStyling,
       validation,
@@ -44,7 +47,9 @@ const FormInput = forwardRef(
           }`
     } appearance-none block w-full 
         py-3 px-4
-     sm:text-sm font-osans rounded-md focus:outline-none ${inputStyles}`
+     sm:text-sm font-osans ${
+       TrailingButton ? 'rounded-none rounded-l-md' : 'rounded-md'
+     } focus:outline-none ${inputStyles}`
     return (
       <div className={`${formInputWrapperClass}`}>
         {label && (
@@ -78,9 +83,32 @@ const FormInput = forwardRef(
               className={defaultInputStyles}
             />
           )}
+          {TrailingButton && (
+            <button
+              type="button"
+              onClick={actionButton}
+              disabled={disabledActionButton || loadingActionButton}
+              className={`-ml-px relative inline-flex items-center space-x-2 px-4 py-2 text-sm font-medium rounded-r-md text-white ${
+                disabledActionButton
+                  ? 'bg-blue-gray-300 cursor-not-allowed'
+                  : 'bg-purple-500 hover:bg-purple-600'
+              } focus:outline-none`}
+            >
+              {loadingActionButton ? (
+                <Spinner size={'h-5 w-5'} color={'text-white'} />
+              ) : (
+                <TrailingButton
+                  className="h-5 w-5 text-white"
+                  aria-hidden="true"
+                />
+              )}
+            </button>
+          )}
+
           {!error && (passwordEyeIcon || TrailingIcon) && (
             <div
               onClick={togglePassword}
+              role={'button'}
               className={`absolute inset-y-0 right-0 pr-3 flex items-center ${
                 TrailingIcon ? 'pointer-events-none' : 'cursor-pointer'
               }`}
@@ -103,7 +131,6 @@ const FormInput = forwardRef(
               )}
             </div>
           )}
-
           {error && (
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
               <ExclamationCircleIcon

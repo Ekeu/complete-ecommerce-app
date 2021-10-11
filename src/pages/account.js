@@ -1,21 +1,20 @@
 import React, { useContext } from 'react'
 import AuthPortal from '../components/auth/auth-portal.component'
+import SettingsPortal from '../components/settings/settings-portal.component'
 import Layout from '../components/layout/layout.component'
 
 import { UserContext } from '../contexts'
 import { setUser } from '../contexts/actions'
 
 const AccountPage = () => {
-  const { user, dispatch, defaultUser } = useContext(UserContext)
-
-  const handleLogout = () => {
-    dispatch(setUser(defaultUser))
-  }
+  const { user } = useContext(UserContext)
 
   return (
     <>
       {user.jwt && user.onboarding ? (
-        <button onClick={handleLogout}>Logout</button>
+        <Layout>
+          <SettingsPortal />
+        </Layout>
       ) : (
         <AuthPortal />
       )}

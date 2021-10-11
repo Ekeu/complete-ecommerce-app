@@ -11,6 +11,8 @@ import { setUser, setSnackbar } from '../../contexts/actions'
 
 import { PASSWORD_CONFIG, EMAIL_CONFIG } from '../../constants/auth.constants'
 
+import { handleSocialAuth } from '../../utils/auth'
+
 const AuthSignup = ({
   components,
   setCurrentComponent,
@@ -62,6 +64,12 @@ const AuthSignup = ({
     setCurrentComponent(components.indexOf(signinComponent))
   }
 
+  const handleSocialSignUp = async provider => {
+    setLoading(true)
+    localStorage.setItem('requestedProvider', provider)
+    await axios.get(process.env.GATSBY_STRAPI_URL + `/connect/${provider}`)
+  }
+
   return (
     <>
       <AuthHeader
@@ -70,7 +78,11 @@ const AuthSignup = ({
         handleChange={navigateToSignin}
       />
       <div className="mt-8">
-        <AuthSocials headline={'Sign up with'} />
+        <AuthSocials
+          headline={'Sign up with'}
+          loading={loading}
+          handleSocialAuth={handleSocialAuth}
+        />
         <div className="mt-6">
           <form onSubmit={onSubmit} className="space-y-6">
             <FormInput
