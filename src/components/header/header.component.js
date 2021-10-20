@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import {
   MenuIcon,
   SearchIcon,
@@ -6,6 +6,8 @@ import {
   UserIcon,
 } from '@heroicons/react/outline'
 import { Link } from 'gatsby'
+
+import { CartContext } from '../../contexts'
 
 import SideMenuDrawer from './side-menu-drawer/side-menu-drawer.component'
 import TopNavigation from './top-navigation/top-navigation.component'
@@ -15,6 +17,7 @@ import Logo from '../../images/icon-adidas-logo.svg'
 
 const Header = ({ categories }) => {
   const [open, setOpen] = useState(false)
+  const { cart } = useContext(CartContext)
 
   const routes = [
     ...categories,
@@ -27,12 +30,10 @@ const Header = ({ categories }) => {
       <header className="relative">
         <nav aria-label="Top">
           <TopNavigation />
-          {/* Secondary navigation */}
           <div className="bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="border-b border-white">
                 <div className="h-16 flex items-center justify-between">
-                  {/* Logo (lg+) */}
                   <div className="hidden lg:flex lg:items-center">
                     <Link to={'/'}>
                       <span className="sr-only">Adidas</span>
@@ -47,7 +48,10 @@ const Header = ({ categories }) => {
                           <CustomLink
                             key={route.node.strapiId}
                             type={'nav'}
-                            link={route.node.link || `/${route.node.name.toLowerCase()}`}
+                            link={
+                              route.node.link ||
+                              `/${route.node.name.toLowerCase()}`
+                            }
                             customStyles="flex items-center"
                           >
                             {route.node.name}
@@ -57,7 +61,6 @@ const Header = ({ categories }) => {
                     </div>
                   </div>
 
-                  {/* Mobile menu and search (lg-) */}
                   <div className="flex-1 flex items-center lg:hidden">
                     <button
                       type="button"
@@ -68,7 +71,6 @@ const Header = ({ categories }) => {
                       <MenuIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
 
-                    {/* Search */}
                     <a
                       href="#"
                       className="ml-2 p-2 text-blue-gray-400 hover:text-blue-gray-500"
@@ -78,7 +80,6 @@ const Header = ({ categories }) => {
                     </a>
                   </div>
 
-                  {/* Logo (lg-) */}
                   <Link to={'/'} className="lg:hidden">
                     <span className="sr-only">Adidas</span>
                     <img src={Logo} alt={'Adidas'} className="h-8 w-auto" />
@@ -126,7 +127,7 @@ const Header = ({ categories }) => {
                             aria-hidden="true"
                           />
                           <span className="ml-2 text-sm font-medium font-hind text-blue-gray-700 group-hover:text-blue-gray-800">
-                            0
+                            {cart.length}
                           </span>
                           <span className="sr-only">
                             items in cart, view bag

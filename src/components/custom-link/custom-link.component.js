@@ -38,7 +38,7 @@ const CustomLink = ({ link, customStyles, children, type, ...otherProps }) => {
       <Link
         to={link}
         {...otherProps}
-        className={`rounded-md font-hind border border-transparent font-medium ${customStyles}`}
+        className={`rounded-md font-hind border border-transparent font-medium focus:outline-none ${customStyles}`}
       >
         {children}
       </Link>

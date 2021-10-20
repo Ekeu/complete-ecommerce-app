@@ -6,7 +6,6 @@ import QuickView from '../product-list/quick-view.component'
 
 const ProductCard = ({ product, variant }) => {
   const [open, setOpen] = useState(false)
-
   const imageURL = process.env.GATSBY_STRAPI_URL + variant.images[0].url
   const productName = product.node.name
   return (

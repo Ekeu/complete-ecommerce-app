@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import FormInput from '../form-input/form-input.component'
 import CustomButton from '../custom-button/custom-button.component'
 
+import { EMAIL_CONFIG } from '../../constants/auth.constants'
+
 const ContactForm = () => {
   const {
     register,
@@ -74,13 +76,7 @@ const ContactForm = () => {
         label="email"
         labelText="Email Address"
         autoComplete="email"
-        register={register('email', {
-          required: 'Please enter your email address',
-          pattern: {
-            value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-            message: 'Please enter a valid email address',
-          },
-        })}
+        register={register('email', { ...EMAIL_CONFIG })}
         placeholder="john.doe@gmail.com"
         formInputWrapperClass={'sm:col-span-2'}
         ringStyling={

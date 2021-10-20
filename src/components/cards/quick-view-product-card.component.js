@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'gatsby'
+import { CheckCircleIcon } from '@heroicons/react/solid'
 
 import { currencyFormatter, createSlug } from '../../utils/functions'
 import { colorIndex } from '../../utils/product'
+
+import { CartContext } from '../../contexts'
+import { addToCart } from '../../contexts/actions'
 
 import { getStockDisplay } from '../product-detail/product-info.component'
 import ProductReviews from '../product/product-reviews.component'
@@ -27,6 +31,9 @@ const QuickViewProductCard = ({
   selectedColor,
   setSelectedColor,
 }) => {
+  const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const possibleSizes = ['XS', 'S', 'M', 'L', 'XL', '2XL']
   const actualSizes = possibleSizes
     .filter(size => new Set(productSizes).has(size))
@@ -45,7 +52,24 @@ const QuickViewProductCard = ({
 
   const stockDisplay = getStockDisplay(stock, selectedVariant)
 
-  const [pdtQty, setPdtQty] = useState(1)
+  const { cart, dispatch } = useContext(CartContext)
+
+  const handleAddToCart = () => {
+    setLoading(true)
+    setLoading(false)
+    setSuccess(true)
+    dispatch(
+      addToCart(variant, 1, productName, stock[selectedVariant].quantity)
+    )
+  }
+
+  useEffect(() => {
+    let timer
+    if (success) {
+      timer = setTimeout(() => setSuccess(false), 1500)
+    }
+    return () => clearTimeout(timer)
+  }, [success])
 
   return (
     <>
@@ -118,12 +142,17 @@ const QuickViewProductCard = ({
               quantity={stock && stock[selectedVariant].quantity}
             />
             <CustomButton
-              type={'submit'}
+              type={'button'}
+              onClick={handleAddToCart}
+              loading={loading}
+              success={success}
+              SuccessIcon={CheckCircleIcon}
+              successText={'Product added!'}
               customStyles={
                 'mt-8 bg-purple-600 border-transparent py-3 px-8 flex items-center text-white hover:bg-purple-700 w-full'
               }
             >
-              Add to bag
+              Add to cart
             </CustomButton>
             <p className="absolute top-4 left-4 text-center sm:static sm:mt-8">
               <Link

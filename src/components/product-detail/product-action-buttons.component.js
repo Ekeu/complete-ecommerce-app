@@ -1,9 +1,29 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { HeartIcon, CalendarIcon } from '@heroicons/react/outline'
+
+import { CartContext } from '../../contexts'
+import { addToCart } from '../../contexts/actions'
 
 import CustomButton from '../custom-button/custom-button.component'
 
-const ProductActionButtons = () => {
+const ProductActionButtons = (
+  stock,
+  variants,
+  selectedVariant,
+  productName
+) => {
+  const { cart, dispatch } = useContext(CartContext)
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart(
+        variants[selectedVariant],
+        1,
+        productName,
+        stock[selectedVariant].quantity
+      )
+    )
+  }
   return (
     <div className={'mt-6'}>
       <div className={'mt-10 flex sm:flex-col1'}>
@@ -13,7 +33,7 @@ const ProductActionButtons = () => {
             'max-w-xs flex-1 bg-purple-600 border-transparent py-3 px-8 flex text-white hover:bg-purple-700 sm:w-full'
           }
         >
-          Add to bag
+          Add to cart
         </CustomButton>
 
         <CustomButton

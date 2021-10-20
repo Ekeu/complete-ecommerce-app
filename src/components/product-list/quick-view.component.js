@@ -28,7 +28,7 @@ const QuickView = ({
   const [selectedVariant, setSelectedVariant] = useState(null)
   const [stock, setStock] = useState(null)
 
-  const { loading, error, data } = useQuery(GET_INVENTORY_DETAILS, {
+  const { error, data } = useQuery(GET_INVENTORY_DETAILS, {
     variables: { id: product.node.strapiId },
   })
 
