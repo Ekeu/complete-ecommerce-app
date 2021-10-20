@@ -14,12 +14,20 @@ export const FeedbackWrapper = ({ children }) => {
     open: false,
     icon: { color: '', component: () => <></> },
     message: '',
+    component: null,
   })
 
   const openSnackbar = () => {
-    toast(<SnackBar message={feedback.message} icon={feedback.icon} />, {
-      onClose: () => dispatch(setSnackbar({ open: false })),
-    })
+    toast(
+      <SnackBar
+        message={feedback.message}
+        icon={feedback.icon}
+        Component={feedback.component}
+      />,
+      {
+        onClose: () => dispatch(setSnackbar({ open: false })),
+      }
+    )
   }
 
   return (

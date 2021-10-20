@@ -28,6 +28,7 @@ const UserSettingsDetails = ({
   }
 
   useEffect(() => {
+    if (user.username === 'Guest') return 
     setValue('name', user.contactInfo[selectedSlot].name || '')
     setValue('email', user.contactInfo[selectedSlot].email || '')
     setValue('phone', user.contactInfo[selectedSlot].phone || '')
@@ -50,7 +51,7 @@ const UserSettingsDetails = ({
               id="payment-details-heading"
               className="text-lg leading-6 font-medium text-gray-900"
             >
-              Billing Information
+              Contact Information
             </h2>
             <p className="mt-1 text-sm text-gray-500">
               Feel free to edit any of your details below so your account is up

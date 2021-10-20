@@ -4,7 +4,7 @@ import Slots from '../slots/slots.component'
 
 const UserSettingsPayments = ({ user }) => {
   const [selectedSlot, setSelectedSlot] = useState(0)
-  const card = user.paymentMethods[selectedSlot]
+  const card = user.username === 'Guest' ? {lastFour: '', brand: ''} : user.paymentMethods[selectedSlot]
   return (
     <div className="bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">

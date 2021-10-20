@@ -1,6 +1,12 @@
 import React from 'react'
 
-const Slots = ({ selectedSlot, setSelectedSlot }) => {
+const Slots = ({
+  selectedSlot,
+  setSelectedSlot,
+  description,
+  containerStyles,
+  slotStyles,
+}) => {
   const saves = [
     { name: 'Save 1', label: 'one', value: 1 },
     { name: 'Save 2', label: 'two', value: 2 },
@@ -8,9 +14,21 @@ const Slots = ({ selectedSlot, setSelectedSlot }) => {
   ]
 
   return (
-    <div className="px-4 py-3 bg-blue-gray-50 flex justify-end sm:px-6">
+    <div
+      className={`${
+        containerStyles || 'bg-blue-gray-50 justify-end px-4 sm:px-6 py-3'
+      } flex`}
+    >
       <nav className="flex items-center justify-center">
-        <ol role="list" className="ml-8 flex items-center space-x-5">
+        {description && (
+          <p className="text-sm text-blue-gray-600 font-medium font-osans">
+            {description}
+          </p>
+        )}
+        <ol
+          role="list"
+          className={`${slotStyles || 'ml-5'} flex items-center space-x-5`}
+        >
           {saves.map(save => (
             <li key={save.name} className={'cursor-pointer'}>
               {selectedSlot === save.value - 1 ? (

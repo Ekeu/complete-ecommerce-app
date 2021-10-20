@@ -1,7 +1,7 @@
 import React from 'react'
 import { XIcon } from '@heroicons/react/solid'
 
-const SnackBar = ({ closeToast, message, icon }) => {
+const SnackBar = ({ closeToast, message, icon, Component }) => {
   return (
     <div className="max-w-sm w-full bg-white font-hind shadow-md rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
       <div className="p-4">
@@ -13,7 +13,8 @@ const SnackBar = ({ closeToast, message, icon }) => {
             />
           </div>
           <div className="ml-3 w-0 flex-1 pt-0.5">
-            <p className="mt-1 text-sm text-blue-gray-600">{message}</p>
+            <p className="text-sm text-blue-gray-600">{message}</p>
+            {Component}
           </div>
           <div className="ml-4 flex-shrink-0 flex">
             <button

@@ -129,7 +129,12 @@ const ProductInfo = ({
           />
         </div>
       </div>
-      <ProductActionButtons stock={stock} selectedVariant={selectedVariant} />
+      <ProductActionButtons
+        stock={stock}
+        selectedVariant={selectedVariant}
+        productName={name}
+        variants={variants}
+      />
       <ProductDetails details={specifications.details} />
     </>
   )

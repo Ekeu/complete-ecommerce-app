@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import {
   MenuIcon,
   SearchIcon,
@@ -6,6 +6,8 @@ import {
   UserIcon,
 } from '@heroicons/react/outline'
 import { Link } from 'gatsby'
+
+import { CartContext } from '../../contexts'
 
 import SideMenuDrawer from './side-menu-drawer/side-menu-drawer.component'
 import TopNavigation from './top-navigation/top-navigation.component'
@@ -15,6 +17,7 @@ import Logo from '../../images/icon-adidas-logo.svg'
 
 const Header = ({ categories }) => {
   const [open, setOpen] = useState(false)
+  const { cart } = useContext(CartContext)
 
   const routes = [
     ...categories,
@@ -31,7 +34,6 @@ const Header = ({ categories }) => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="border-b border-white">
                 <div className="h-16 flex items-center justify-between">
-
                   <div className="hidden lg:flex lg:items-center">
                     <Link to={'/'}>
                       <span className="sr-only">Adidas</span>
@@ -46,7 +48,10 @@ const Header = ({ categories }) => {
                           <CustomLink
                             key={route.node.strapiId}
                             type={'nav'}
-                            link={route.node.link || `/${route.node.name.toLowerCase()}`}
+                            link={
+                              route.node.link ||
+                              `/${route.node.name.toLowerCase()}`
+                            }
                             customStyles="flex items-center"
                           >
                             {route.node.name}
@@ -122,7 +127,7 @@ const Header = ({ categories }) => {
                             aria-hidden="true"
                           />
                           <span className="ml-2 text-sm font-medium font-hind text-blue-gray-700 group-hover:text-blue-gray-800">
-                            0
+                            {cart.length}
                           </span>
                           <span className="sr-only">
                             items in cart, view bag

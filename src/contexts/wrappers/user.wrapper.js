@@ -9,7 +9,7 @@ export const UserContext = createContext()
 const UserProvider = UserContext.Provider
 
 export const UserWrapper = ({ children }) => {
-  const defaultUser = { username: 'Guest User' }
+  const defaultUser = { username: 'Guest' }
   const storedUser = JSON.parse(localStorage.getItem('user'))
   const [user, dispatch] = useReducer(userReducer, storedUser || defaultUser)
 

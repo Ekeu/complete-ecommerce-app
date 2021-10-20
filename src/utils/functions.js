@@ -1,9 +1,9 @@
 import slugify from 'slugify'
 
 export const currencyFormatter = value => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('fr-FR', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'EUR',
   }).format(value)
 }
 

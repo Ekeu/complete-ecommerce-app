@@ -4,8 +4,10 @@ import { LocationMarkerIcon } from '@heroicons/react/solid'
 import FormInput from '../form-input/form-input.component'
 import Slots from '../slots/slots.component'
 
-import { STREET_CONFIG } from '../../constants/auth.constants'
-import axios from 'axios'
+import {
+  loadGoogleMapsPlacesObject,
+  handleLocateMe,
+} from '../../utils/location'
 
 const UserSettingsLocation = ({
   user,
@@ -23,76 +25,21 @@ const UserSettingsLocation = ({
 }) => {
   const [loadingActionButton, setLoadingActionButton] = useState(false)
 
-  const getUserAddress = async (lat, long) => {
-    try {
-      const googleMapsRes = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${process.env.GATSBY_GOOGLE_MAPS_API_KEY}`
-      )
-      if (googleMapsRes.data.error_message) {
-        console.log(googleMapsRes.data.error_message)
-        dispatchFeedback(
-          setSnackbar({
-            status: 'error',
-            message: googleMapsRes.data.error_message,
-          })
-        )
-      } else {
-        setValue('street', googleMapsRes.data.results[0].formatted_address)
-        setValue(
-          'city',
-          googleMapsRes.data.results[0].address_components[2].long_name
-        )
-        setValue(
-          'zip',
-          googleMapsRes.data.results[0].address_components[6].long_name
-        )
-        setValue(
-          'state',
-          googleMapsRes.data.results[0].address_components[4].long_name
-        )
-      }
-      setLoadingActionButton(false)
-    } catch (error) {
-      dispatchFeedback(
-        setSnackbar({
-          status: 'error',
-          message: error.message,
-        })
-      )
-      setLoadingActionButton(false)
-    }
-  }
-
-  const handleLocateMe = () => {
-    setLoadingActionButton(true)
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          getUserAddress(position.coords.latitude, position.coords.longitude)
-        },
-        error => {
-          dispatchFeedback(
-            setSnackbar({
-              status: 'error',
-              message:
-                'You denied to be located. Please type your address manually.',
-            })
-          )
-          setLoadingActionButton(false)
-        }
-      )
-    } else {
-      dispatchFeedback(
-        setSnackbar({
-          status: 'error',
-          message: 'Your browser version does not support Geolocation.',
-        })
-      )
-      setLoadingActionButton(false)
-    }
+  const handleLocateUser = () => {
+    handleLocateMe(
+      setLoadingActionButton,
+      dispatchFeedback,
+      setSnackbar,
+      setValue,
+      'street',
+      'zip',
+      'city',
+      'state'
+    )
   }
 
   useEffect(() => {
+    if (user.username === 'Guest') return 
     setValue('street', user.locations[selectedSlot].street || '')
     setValue('zip', user.locations[selectedSlot].zip || '')
     setValue('city', user.locations[selectedSlot].city || '')
@@ -107,33 +54,38 @@ const UserSettingsLocation = ({
   }, [watchLocationFields])
 
   useEffect(() => {
-    const loadGoogleMapsPlacesObject = () => {
-      const autocomplete = new window.google.maps.places.Autocomplete(
-        document.getElementById('autocomplete'),
-        {
-          bounds: new window.google.maps.LatLngBounds(
-            new window.google.maps.LatLng(48.85341, 2.3488)
-          ),
-        }
-      )
-      autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace()
-        setValue('zip', place.address_components[6].long_name)
-        setValue('city', place.address_components[2].long_name)
-        setValue('state', place.address_components[4].long_name)
-      })
-    }
-
     if (!window.google) {
       const googleMapsScript = document.createElement('script')
       googleMapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.GATSBY_GOOGLE_MAPS_API_KEY}&libraries=places`
       googleMapsScript.async = true
       window.document.body.appendChild(googleMapsScript)
-      googleMapsScript.addEventListener('load', loadGoogleMapsPlacesObject)
+      googleMapsScript.addEventListener('load', () =>
+        loadGoogleMapsPlacesObject(
+          setValue,
+          'autocomplete',
+          'zip',
+          'city',
+          'state'
+        )
+      )
       return () =>
-        googleMapsScript.removeEventListener(`load`, loadGoogleMapsPlacesObject)
+        googleMapsScript.removeEventListener(`load`, () =>
+          loadGoogleMapsPlacesObject(
+            setValue,
+            'autocomplete',
+            'zip',
+            'city',
+            'state'
+          )
+        )
     } else {
-      loadGoogleMapsPlacesObject()
+      loadGoogleMapsPlacesObject(
+        setValue,
+        'autocomplete',
+        'zip',
+        'city',
+        'state'
+      )
     }
   }, [])
 
@@ -164,7 +116,7 @@ const UserSettingsLocation = ({
               autoComplete="street-address"
               TrailingButton={LocationMarkerIcon}
               loadingActionButton={loadingActionButton}
-              actionButton={handleLocateMe}
+              actionButton={handleLocateUser}
               register={register('street')}
               disabledActionButton={!edit}
               disabled={!edit}

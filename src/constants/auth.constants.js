@@ -9,6 +9,18 @@ export const PASSWORD_CONFIG = {
   },
 }
 
+export const NAME_CONFIG = {
+  required: 'Enter your name',
+  maxLength: {
+    value: 15,
+    message: 'Your name is too long',
+  },
+  minLength: {
+    value: 3,
+    message: 'Your name is too short',
+  },
+}
+
 export const EMAIL_CONFIG = {
   required: 'Enter your e-mail address',
   pattern: {

@@ -4,7 +4,7 @@ export const userReducer = (state = {}, action) => {
   const { user } = action.payload
   switch (action.type) {
     case SET_USER:
-      if (user.username === 'Guest User') {
+      if (user.username === 'Guest') {
         localStorage.removeItem('user')
       } else {
         localStorage.setItem('user', JSON.stringify(user))
