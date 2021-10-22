@@ -1,12 +1,15 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import { navigate } from 'gatsby-link'
 import { useForm } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+
 import { CartContext, FeedbackContext, UserContext } from '../../contexts'
 import { setSnackbar, clearCart, setUser } from '../../contexts/actions'
 import CheckoutOrder from './checkout-order.component'
 import CheckoutUserInfo from './checkout-user-info.component'
 import ProductsMessage from '../snackbar/products.message.component'
-import { navigate } from 'gatsby-link'
 
 const deliveryMethods = [
   {
@@ -36,8 +39,11 @@ const CheckoutPortal = () => {
 
   const [selectedLocationSlot, setSelectedLocationSlot] = useState(0)
   const [selectedDetailsSlot, setSelectedDetailsSlot] = useState(0)
+  const [selectedPaymentSlot, setSelectedPaymentSlot] = useState(0)
   const [detailBilling, setDetailBilling] = useState(false)
   const [locationBilling, setLocationBilling] = useState(false)
+  const [saveCard, setSaveCard] = useState(false)
+  const [card, setCard] = useState({ brand: '', lastFour: '' })
   const [provideDifferentDetailBilling, setProvideDifferentDetailBilling] =
     useState(false)
   const [provideDifferentLocationBilling, setProvideDifferentLocationBilling] =
@@ -48,6 +54,8 @@ const CheckoutPortal = () => {
   const [billingDetails, setBillingDetails] = useState([])
   const [billingLocation, setBillingLocation] = useState([])
   const [loading, setLoading] = useState(false)
+  const [clientSecret, setClientSecret] = useState(null)
+  const [placedOrder, setPlacedOrder] = useState(null)
 
   const {
     register,
@@ -59,6 +67,9 @@ const CheckoutPortal = () => {
     setError,
     watch,
   } = useForm()
+
+  const stripe = useStripe()
+  const elements = useElements()
 
   const subtotal = cart.reduce(
     (acc, item) => acc + item.variant.price * item.quantity,
@@ -115,7 +126,13 @@ const CheckoutPortal = () => {
       b_city,
       b_state,
     }) => {
+      localStorage.removeItem('failedPaymentIntent')
+      localStorage.removeItem('failedCart')
+
+      if (!stripe || !elements) return
+
       setLoading(true)
+
       if (
         (!(detailBilling !== false) || provideDifferentDetailBilling) &&
         (detailBilling !== false || !provideDifferentDetailBilling)
@@ -208,70 +225,164 @@ const CheckoutPortal = () => {
           )
         }
       }
-      try {
-        const res = await axios.post(
-          process.env.GATSBY_STRAPI_URL + '/orders/place-order',
-          {
-            shippingAddress,
-            billingAddress,
-            shippingInformation,
-            billingInformation,
-            deliveryMethod: selectedDeliveryMethod,
-            subtotal: subtotal.toFixed(2),
-            tax: tax.toFixed(2),
-            total: total.toFixed(2),
-            items: cart,
+
+      const idempotencyKey = uuidv4()
+
+      const cardElement = elements.getElement(CardElement)
+
+      const result = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              address: {
+                city: billingAddress.city,
+                state: billingAddress.state,
+                line1: billingAddress.street,
+              },
+              email: billingInformation.email,
+              name: billingInformation.name,
+              phone: billingInformation.phone,
+            },
           },
-          {
-            headers:
-              user.username === 'Guest'
-                ? undefined
-                : {
-                    Authorization: `Bearer ${user.jwt}`,
-                  },
-          }
+          setup_future_usage: saveCard ? 'off_session' : undefined,
+        },
+        { idempotencyKey }
+      )
+
+      if (result.error) {
+        console.error(result.error.message)
+        dispatchFeedback(
+          setSnackbar({ status: 'error', message: result.error.message })
         )
         setLoading(false)
-        dispatchCart(clearCart())
-        localStorage.setItem('placedOrder', JSON.stringify(res.data.validOrder))
-        navigate('/thankyou')
-      } catch (error) {
-        setLoading(false)
-        console.error(error)
-        switch (error.response.status) {
-          case 400:
-            dispatchFeedback(
-              setSnackbar({
-                status: 'error',
-                message: 'Invalid cart.',
-              })
-            )
-            break
-          case 409:
-            dispatchFeedback(
-              setSnackbar({
-                status: 'error',
-                message: `The following items are not available at the requested quantity. Please update your cart and try again.`,
-                component: (
-                  <ProductsMessage
-                    unavailableItems={error.response.data.unavailableItems}
-                  />
-                ),
-              })
-            )
-            break
-
-          default:
-            dispatchFeedback(
-              setSnackbar({
-                status: 'error',
-                message: `Something went wrong, please refresh the page and try again. You have NOT been charged.`,
-              })
-            )
+        return
+      } else if (result.paymentIntent.status === 'succeeded') {
+        try {
+          const res = await axios.post(
+            process.env.GATSBY_STRAPI_URL + '/orders/finalize-order',
+            {
+              shippingAddress,
+              billingAddress,
+              shippingInformation,
+              billingInformation,
+              deliveryMethod: selectedDeliveryMethod,
+              subtotal: subtotal.toFixed(2),
+              tax: tax.toFixed(2),
+              total: total.toFixed(2),
+              items: cart,
+              transaction: result.paymentIntent.id,
+            },
+            {
+              headers:
+                user.username === 'Guest'
+                  ? undefined
+                  : {
+                      Authorization: `Bearer ${user.jwt}`,
+                    },
+            }
+          )
+          setLoading(false)
+          dispatchCart(clearCart())
+          localStorage.removeItem('intentID')
+          setClientSecret(null)
+          setPlacedOrder(res.data.validOrder)
+          localStorage.setItem(
+            'placedOrder',
+            JSON.stringify(res.data.validOrder)
+          )
+          navigate('/thankyou')
+        } catch (error) {
+          setLoading(false)
+          console.error(error)
+          localStorage.setItem(
+            'failedPaymentIntent',
+            JSON.stringify(result.paymentIntent.id)
+          )
+          localStorage.setItem('failedCart', JSON.stringify(cart))
+          localStorage.removeItem('intentID')
+          setClientSecret(null)
+          dispatchFeedback(
+            setSnackbar({
+              status: 'error',
+              message:
+                'There was a problem saving your order. Please keep this screen open and contact support.',
+            })
+          )
         }
       }
     }
   )
+
+  useEffect(() => {
+    if (!placedOrder && cart.length !== 0) {
+      const storedIntent = localStorage.getItem('intentID')
+      const idempotencyKey = uuidv4()
+
+      setClientSecret(null)
+
+      axios
+        .post(
+          process.env.GATSBY_STRAPI_URL + '/orders/process-order',
+          {
+            items: cart,
+            total: total.toFixed(2),
+            deliveryMethod: selectedDeliveryMethod,
+            idempotencyKey,
+            storedIntent,
+            email: getValues('email'),
+          },
+          {
+            headers: user.jwt
+              ? {
+                  Authorization: `Bearer ${user.jwt}`,
+                }
+              : undefined,
+          }
+        )
+        .then(res => {
+          setClientSecret(res.data.client_secret)
+          localStorage.setItem('intentID', res.data.intentID)
+        })
+        .catch(error => {
+          console.error(error)
+          switch (error.response.status) {
+            case 400:
+              dispatchFeedback(
+                setSnackbar({
+                  status: 'error',
+                  message: 'Invalid cart.',
+                })
+              )
+              break
+            case 409:
+              dispatchFeedback(
+                setSnackbar({
+                  status: 'error',
+                  message: `The following items are not available at the requested quantity. Please update your cart and try again.`,
+                  component: (
+                    <ProductsMessage
+                      unavailableItems={error.response.data.unavailableItems}
+                    />
+                  ),
+                })
+              )
+              break
+
+            default:
+              dispatchFeedback(
+                setSnackbar({
+                  status: 'error',
+                  message: `Something went wrong, please refresh the page and try again. You have NOT been charged.`,
+                })
+              )
+          }
+        })
+    }
+  }, [cart])
+
+  console.log('CLIENT SECRET ', clientSecret)
 
   return (
     <main className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
@@ -294,6 +405,8 @@ const CheckoutPortal = () => {
             setSelectedLocationSlot={setSelectedLocationSlot}
             selectedDetailsSlot={selectedDetailsSlot}
             setSelectedDetailsSlot={setSelectedDetailsSlot}
+            selectedPaymentSlot={selectedPaymentSlot}
+            setSelectedPaymentSlot={setSelectedPaymentSlot}
             detailBilling={detailBilling}
             setDetailBilling={setDetailBilling}
             locationBilling={locationBilling}
@@ -311,9 +424,12 @@ const CheckoutPortal = () => {
             setBillingDetails={setBillingDetails}
             billingLocation={billingLocation}
             setBillingLocation={setBillingLocation}
+            saveCard={saveCard}
+            setSaveCard={setSaveCard}
+            setCard={setCard}
           />
           <CheckoutOrder
-            loading={loading}
+            loading={loading || !clientSecret}
             cartPricingInfos={cartPricingInfos}
           />
         </form>

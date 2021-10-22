@@ -15,10 +15,12 @@ const CheckoutUserInfoActions = ({
   setEnabledBilling,
   checkBoxId,
   register,
+  slotDescription,
   errors,
   setValue,
   isLocation,
   isContact,
+  isPayment,
   checkBoxHandler,
   checkBoxLabel,
 }) => {
@@ -30,7 +32,7 @@ const CheckoutUserInfoActions = ({
         {user.username !== 'Guest' && (
           <Slots
             selectedSlot={selectedSlot}
-            description={'Shipping'}
+            description={slotDescription}
             setSelectedSlot={setSelectedSlot}
             containerStyles={'bg-transparent px-0'}
           />
@@ -68,7 +70,7 @@ const CheckoutUserInfoActions = ({
           />
         </div>
       )}
-      {enabledBilling !== selectedSlot && (
+      {(enabledBilling !== selectedSlot && !isPayment) && (
         <div className="mt-6 flex items-center">
           <input
             id={checkBoxId}

@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 
 import Slots from '../slots/slots.component'
 
-const UserSettingsPayments = ({ user }) => {
-  const [selectedSlot, setSelectedSlot] = useState(0)
+const UserSettingsPayments = ({ user, selectedSlot, setSelectedSlot }) => {
   const card = user.username === 'Guest' ? {lastFour: '', brand: ''} : user.paymentMethods[selectedSlot]
   return (
     <div className="bg-white shadow sm:rounded-lg">

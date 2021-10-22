@@ -21,6 +21,7 @@ const UserSettings = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedLocationSlot, setSelectedLocationSlot] = useState(0)
   const [selectedDetailsSlot, setSelectedDetailsSlot] = useState(0)
+  const [selectedPaymentSlot, setSelectedPaymentSlot] = useState(0)
 
   const {
     register,
@@ -132,7 +133,8 @@ const UserSettings = () => {
           dispatchFeedback={dispatchFeedback}
           setSnackbar={setSnackbar}
         />
-        <UserSettingsPayments user={user} edit={edit} />
+        <UserSettingsPayments user={user} edit={edit} selectedSlot={selectedPaymentSlot}
+          setSelectedSlot={setSelectedPaymentSlot} />
         <UserSettingsEdit
           edit={edit}
           setEdit={setEdit}
