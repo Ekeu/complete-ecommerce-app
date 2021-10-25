@@ -10,6 +10,7 @@ import { setSnackbar, clearCart, setUser } from '../../contexts/actions'
 import CheckoutOrder from './checkout-order.component'
 import CheckoutUserInfo from './checkout-user-info.component'
 import ProductsMessage from '../snackbar/products.message.component'
+import { validateEmail } from '../../utils/functions'
 
 const deliveryMethods = [
   {
@@ -22,13 +23,13 @@ const deliveryMethods = [
     id: 2,
     title: 'Standard',
     turnaround: '4–10 business days',
-    price: 9.99,
+    price: 10,
   },
   {
     id: 3,
     title: 'Express',
     turnaround: '2–5 business days',
-    price: 29.99,
+    price: 30,
   },
 ]
 
@@ -43,7 +44,12 @@ const CheckoutPortal = () => {
   const [detailBilling, setDetailBilling] = useState(false)
   const [locationBilling, setLocationBilling] = useState(false)
   const [saveCard, setSaveCard] = useState(false)
-  const [card, setCard] = useState({ brand: '', lastFour: '' })
+  const [card, setCard] = useState({
+    brand: '',
+    last4: '',
+    exp_month: '',
+    exp_year: '',
+  })
   const [provideDifferentDetailBilling, setProvideDifferentDetailBilling] =
     useState(false)
   const [provideDifferentLocationBilling, setProvideDifferentLocationBilling] =
@@ -226,6 +232,9 @@ const CheckoutPortal = () => {
         }
       }
 
+      const hasSavedCard =
+        user.jwt && user.paymentMethods[selectedPaymentSlot].last4 !== ''
+
       const idempotencyKey = uuidv4()
 
       const cardElement = elements.getElement(CardElement)
@@ -233,19 +242,21 @@ const CheckoutPortal = () => {
       const result = await stripe.confirmCardPayment(
         clientSecret,
         {
-          payment_method: {
-            card: cardElement,
-            billing_details: {
-              address: {
-                city: billingAddress.city,
-                state: billingAddress.state,
-                line1: billingAddress.street,
+          payment_method: hasSavedCard
+            ? undefined
+            : {
+                card: cardElement,
+                billing_details: {
+                  address: {
+                    city: billingAddress.city,
+                    state: billingAddress.state,
+                    line1: billingAddress.street,
+                  },
+                  email: billingInformation.email,
+                  name: billingInformation.name,
+                  phone: billingInformation.phone,
+                },
               },
-              email: billingInformation.email,
-              name: billingInformation.name,
-              phone: billingInformation.phone,
-            },
-          },
           setup_future_usage: saveCard ? 'off_session' : undefined,
         },
         { idempotencyKey }
@@ -273,6 +284,9 @@ const CheckoutPortal = () => {
               total: total.toFixed(2),
               items: cart,
               transaction: result.paymentIntent.id,
+              paymentMethod: card,
+              saveCard,
+              selectedPaymentSlot,
             },
             {
               headers:
@@ -283,6 +297,12 @@ const CheckoutPortal = () => {
                     },
             }
           )
+          if (saveCard) {
+            const updatedUser = { ...user }
+            updatedUser.paymentMethods[selectedPaymentSlot] = card
+            dispatch(setUser(updatedUser))
+          }
+
           setLoading(false)
           dispatchCart(clearCart())
           localStorage.removeItem('intentID')
@@ -316,12 +336,12 @@ const CheckoutPortal = () => {
   )
 
   useEffect(() => {
-    if (!placedOrder && cart.length !== 0) {
+    const isValidEmail = validateEmail(getValues('email'))
+    if (!placedOrder && cart.length !== 0 && isValidEmail) {
       const storedIntent = localStorage.getItem('intentID')
       const idempotencyKey = uuidv4()
 
       setClientSecret(null)
-
       axios
         .post(
           process.env.GATSBY_STRAPI_URL + '/orders/process-order',
@@ -332,6 +352,10 @@ const CheckoutPortal = () => {
             idempotencyKey,
             storedIntent,
             email: getValues('email'),
+            savedCard:
+              user.jwt && user.paymentMethods[selectedPaymentSlot].last4 !== ''
+                ? user.paymentMethods[selectedPaymentSlot].last4
+                : undefined,
           },
           {
             headers: user.jwt
@@ -380,9 +404,21 @@ const CheckoutPortal = () => {
           }
         })
     }
-  }, [cart])
+  }, [cart, total])
 
-  console.log('CLIENT SECRET ', clientSecret)
+  useEffect(() => {
+    if (!user.jwt) return
+    if (user.paymentMethods[selectedPaymentSlot].last4 !== '') {
+      setCard(user.paymentMethods[selectedPaymentSlot])
+    } else {
+      setCard({
+        brand: '',
+        last4: '',
+        exp_month: '',
+        exp_year: '',
+      })
+    }
+  }, [selectedPaymentSlot])
 
   return (
     <main className="max-w-7xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
@@ -429,7 +465,10 @@ const CheckoutPortal = () => {
             setCard={setCard}
           />
           <CheckoutOrder
-            loading={loading || !clientSecret}
+            loading={
+              loading ||
+              (validateEmail(getValues('email')) ? !clientSecret : false)
+            }
             cartPricingInfos={cartPricingInfos}
           />
         </form>

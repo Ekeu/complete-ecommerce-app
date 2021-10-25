@@ -19,3 +19,12 @@ export const createSlug = name =>
 export const capitalize = string => {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
+
+export const validateEmail = email => {
+  const mailFormat = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
+  if (email?.match(mailFormat)) {
+    return true
+  } else {
+    return false
+  }
+}

@@ -26,6 +26,13 @@ const CheckoutUserInfoActions = ({
 }) => {
   const { user } = useContext(UserContext)
 
+  const setEnabledContactAndShipping = () =>
+    setEnabledBilling(enabledBilling === selectedSlot ? false : selectedSlot)
+
+  const setEnabledPayment = () => setEnabledBilling(!enabledBilling)
+
+  const enabled = isPayment ? enabledBilling : enabledBilling === selectedSlot
+
   return (
     <>
       <div className={`flex justify-between pt-4`}>
@@ -38,15 +45,18 @@ const CheckoutUserInfoActions = ({
           />
         )}
 
-        {!provideDifferentBillingOption && (
+        {!isPayment && !provideDifferentBillingOption && (
           <Toggle
             description={toggleDescription}
-            enabled={enabledBilling === selectedSlot}
-            setEnabled={() =>
-              setEnabledBilling(
-                enabledBilling === selectedSlot ? false : selectedSlot
-              )
-            }
+            enabled={enabled}
+            setEnabled={setEnabledContactAndShipping}
+          />
+        )}
+        {isPayment && !user.paymentMethods[selectedSlot].last4 && (
+          <Toggle
+            description={toggleDescription}
+            enabled={enabled}
+            setEnabled={setEnabledPayment}
           />
         )}
       </div>
@@ -70,7 +80,7 @@ const CheckoutUserInfoActions = ({
           />
         </div>
       )}
-      {(enabledBilling !== selectedSlot && !isPayment) && (
+      {enabledBilling !== selectedSlot && !isPayment && (
         <div className="mt-6 flex items-center">
           <input
             id={checkBoxId}

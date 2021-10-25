@@ -35,7 +35,7 @@ const CheckoutUserInfo = ({
   setBillingLocation,
   saveCard,
   setSaveCard,
-  setCard
+  setCard,
 }) => {
   const handleCheckDifferentContactBilling = e => {
     setProvideDifferentDetailBilling(e.target.checked)
@@ -134,15 +134,17 @@ const CheckoutUserInfo = ({
           user={user}
           setCard={setCard}
         />
-        <CheckoutUserInfoActions
-          selectedSlot={selectedPaymentSlot}
-          setSelectedSlot={setSelectedPaymentSlot}
-          slotDescription={'Saved cards'}
-          toggleDescription={'Save for future purchase'}
-          enabledBilling={saveCard}
-          isPayment={true}
-          setEnabledBilling={setSaveCard}
-        />
+        {user.jwt && (
+          <CheckoutUserInfoActions
+            selectedSlot={selectedPaymentSlot}
+            setSelectedSlot={setSelectedPaymentSlot}
+            slotDescription={'Saved cards'}
+            toggleDescription={'Save for future purchase'}
+            enabledBilling={saveCard}
+            isPayment={true}
+            setEnabledBilling={setSaveCard}
+          />
+        )}
       </div>
     </div>
   )

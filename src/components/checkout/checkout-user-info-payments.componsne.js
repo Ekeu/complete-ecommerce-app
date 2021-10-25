@@ -1,5 +1,6 @@
 import React from 'react'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import CreditCard from '../cards/credit-card.component'
 
 const style = {
   base: {
@@ -14,16 +15,27 @@ const style = {
   },
 }
 
-const CheckoutUserInfoPayments = ({ selectedPaymentSlot, setCard }) => {
+const CheckoutUserInfoPayments = ({ selectedPaymentSlot, user, setCard }) => {
   const elements = useElements()
   const stripe = useStripe()
+
+  const card =
+    user.username === 'Guest'
+      ? { last4: '', brand: '', exp_month: '', exp_year: '' }
+      : user.paymentMethods[selectedPaymentSlot]
 
   const handleCardChange = async e => {
     if (e.complete) {
       const cardElement = elements.getElement(CardElement)
-      const { error, paymentMethod } = await stripe.createPaymentMethod({
+      const { paymentMethod } = await stripe.createPaymentMethod({
         type: 'card',
         card: cardElement,
+      })
+      setCard({
+        brand: paymentMethod.card.brand,
+        last4: paymentMethod.card.last4,
+        exp_month: paymentMethod.card.exp_month,
+        exp_year: paymentMethod.card.exp_year,
       })
     }
   }
@@ -31,7 +43,17 @@ const CheckoutUserInfoPayments = ({ selectedPaymentSlot, setCard }) => {
   const cardWrapper = (
     <CardElement options={{ style: style }} onChange={handleCardChange} />
   )
-  return <>{cardWrapper}</>
+  return (
+    <div className="mt-5">
+      {card.last4 ? (
+        <div className="rounded-md bg-blue-gray-50 px-6 py-5 sm:flex sm:items-start sm:justify-between">
+          <CreditCard card={card} user={user} setCard={setCard} />
+        </div>
+      ) : (
+        cardWrapper
+      )}
+    </div>
+  )
 }
 
 export default CheckoutUserInfoPayments
