@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import { currencyFormatter } from '../../utils/functions'
 import { colorIndex } from '../../utils/product'
@@ -8,6 +8,8 @@ import ProductReviews from '../product/product-reviews.component'
 import ProductColors from '../product/product-colors.component'
 import ProductSizes from '../product/product-sizes.component'
 import ProductDetails from './product-details.component'
+import { UserContext, FeedbackContext } from '../../contexts'
+import { setSnackbar } from '../../contexts/actions'
 
 export const getStockDisplay = (stock, variant) => {
   switch (stock) {
@@ -33,8 +35,11 @@ const ProductInfo = ({
   specifications,
   selectedVariant,
   setSelectedVariant,
+  setEdit,
 }) => {
   const [selectedColor, setSelectedColor] = useState(null)
+  const { user } = useContext(UserContext)
+  const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
   const [selectedSize, setSelectedSize] = useState(
     variants[selectedVariant].size
   )
@@ -56,6 +61,23 @@ const ProductInfo = ({
       }
     }
   })
+
+  const handleEditReview = () => {
+    if (user.username === 'Guest') {
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'You must be logged in to leave a review',
+        })
+      )
+      return
+    }
+    setEdit(true)
+    const reviewFormRef = document.getElementById('reviews-heading')
+    reviewFormRef.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
 
   useEffect(() => {
     setSelectedColor(null)
@@ -95,6 +117,8 @@ const ProductInfo = ({
         </div>
         <div className={'ml-4 flex'}>
           <span
+            role={'button'}
+            onClick={handleEditReview}
             className={
               'text-sm font-medium text-purple-600 hover:text-purple-500'
             }

@@ -4,7 +4,6 @@ import SettingsPortal from '../components/settings/settings-portal.component'
 import Layout from '../components/layout/layout.component'
 
 import { UserContext } from '../contexts'
-import { setUser } from '../contexts/actions'
 
 const AccountPage = () => {
   const { user } = useContext(UserContext)

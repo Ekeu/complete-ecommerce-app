@@ -65,7 +65,7 @@ const ProductList = ({ data, pageContext }) => {
 
     Object.keys(filterOptions)
       .filter(option => filterOptions[option] !== null)
-      .map(option => {
+      .map(option =>
         filterOptions[option].forEach(value => {
           if (value.checked) {
             setIsFiltered(true)
@@ -92,7 +92,7 @@ const ProductList = ({ data, pageContext }) => {
             })
           }
         })
-      })
+      )
 
     Object.keys(prvActiveFilters).forEach(filter => {
       prvFilteredProducts = prvFilteredProducts.filter(item => {

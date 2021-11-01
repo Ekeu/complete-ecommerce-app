@@ -10,7 +10,17 @@ const CheckoutPage = () => {
 
   return (
     <Layout>
-      <Elements stripe={stripe}>
+      <Elements
+        stripe={stripe}
+        options={{
+          fonts: [
+            {
+              cssSrc:
+                'https://fonts.googleapis.com/css2?family=Hind&display=swap',
+            },
+          ],
+        }}
+      >
         <CheckoutPortal />
       </Elements>
     </Layout>

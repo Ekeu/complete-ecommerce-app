@@ -63,13 +63,7 @@ const AuthSignup = ({
     )
     setCurrentComponent(components.indexOf(signinComponent))
   }
-
-  const handleSocialSignUp = async provider => {
-    setLoading(true)
-    localStorage.setItem('requestedProvider', provider)
-    await axios.get(process.env.GATSBY_STRAPI_URL + `/connect/${provider}`)
-  }
-
+  
   return (
     <>
       <AuthHeader
