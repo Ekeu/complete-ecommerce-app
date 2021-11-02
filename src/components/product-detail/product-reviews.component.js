@@ -24,7 +24,7 @@ const ProductReviews = ({ product, edit, setEdit }) => {
     }
   }, [data])
 
-  const reviewsPerPage = 1
+  const reviewsPerPage = 6
   const numPages = Math.ceil(reviews.length / reviewsPerPage)
 
   return (

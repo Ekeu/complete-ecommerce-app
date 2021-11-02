@@ -36,6 +36,7 @@ const ProductInfo = ({
   selectedVariant,
   setSelectedVariant,
   setEdit,
+  rating,
 }) => {
   const [selectedColor, setSelectedColor] = useState(null)
   const { user } = useContext(UserContext)
@@ -98,6 +99,7 @@ const ProductInfo = ({
 
   const stockDisplay = getStockDisplay(stock, selectedVariant)
 
+  console.log(rating)
   return (
     <>
       <h1 className={'text-3xl font-bold tracking-tight text-blue-gray-800'}>
@@ -111,7 +113,7 @@ const ProductInfo = ({
         </p>
       </div>
 
-      <ProductReviews productRating={4} productName={name}>
+      <ProductReviews productRating={rating} productName={name}>
         <div aria-hidden={'true'} className={'ml-4 text-sm text-blue-gray-300'}>
           ·
         </div>
