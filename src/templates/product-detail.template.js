@@ -5,9 +5,9 @@ import Layout from '../components/layout/layout.component'
 import ProductImages from '../components/product-detail/product-images.component'
 import ProductInfo from '../components/product-detail/product-info.component'
 import RecentlyViewedProducts from '../components/product-detail/recently-viewed-products.component'
+import ProductReviews from '../components/product-detail/product-reviews.component'
 
 import { GET_INVENTORY_DETAILS } from '../apollo/queries'
-
 
 const ProductDetail = ({ pageContext }) => {
   const { id, name, description, variants, specifications, product } =
@@ -16,9 +16,11 @@ const ProductDetail = ({ pageContext }) => {
   const [selectedVariant, setSelectedVariant] = useState(0)
   const [selectedImage, setSelectedImage] = useState(0)
   const [stock, setStock] = useState(null)
+  const [rating, setRating] = useState(0)
+  const [edit, setEdit] = useState(false)
 
-  const { loading, error, data } = useQuery(GET_INVENTORY_DETAILS, {
-    variables: { id }
+  const { error, data } = useQuery(GET_INVENTORY_DETAILS, {
+    variables: { id },
   })
 
   useEffect(() => {
@@ -26,6 +28,7 @@ const ProductDetail = ({ pageContext }) => {
       setStock(-1)
     } else if (data) {
       setStock(data.product.variants)
+      setRating(data.product.rating ? data.product.rating : 0)
     }
   }, [error, data])
 
@@ -85,10 +88,12 @@ const ProductDetail = ({ pageContext }) => {
                   selectedVariant={selectedVariant}
                   setSelectedVariant={setSelectedVariant}
                   stock={stock}
+                  rating={rating}
+                  setEdit={setEdit}
                 />
               </div>
             </div>
-
+            <ProductReviews product={id} edit={edit} setEdit={setEdit} />
             <RecentlyViewedProducts
               products={JSON.parse(
                 localStorage.getItem('recentlyViewedProducts')

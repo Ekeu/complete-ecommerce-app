@@ -52,7 +52,7 @@ const QuickViewProductCard = ({
 
   const stockDisplay = getStockDisplay(stock, selectedVariant)
 
-  const { cart, dispatch } = useContext(CartContext)
+  const { dispatch } = useContext(CartContext)
 
   const handleAddToCart = () => {
     setLoading(true)

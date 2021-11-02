@@ -28,7 +28,7 @@ const PromoFeaturedCard = ({
       >
         {name}
       </h3>
-      {rating && <Rating rating={rating} productId={name} customStyles={'mt-1'} />}
+      <Rating rating={rating} productId={name} customStyles={'mt-1'} />
       <p className={'mt-3 font-osans text-sm text-blue-gray-500'}>
         {style || currencyFormatter(price)}
       </p>

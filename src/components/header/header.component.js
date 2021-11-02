@@ -72,7 +72,6 @@ const Header = ({ categories }) => {
                     </button>
 
                     <a
-                      href="#"
                       className="ml-2 p-2 text-blue-gray-400 hover:text-blue-gray-500"
                     >
                       <span className="sr-only">Search</span>
@@ -90,7 +89,6 @@ const Header = ({ categories }) => {
                       <div className="flex space-x-8">
                         <div className="hidden lg:flex">
                           <a
-                            href="#"
                             className="-m-2 p-2 text-blue-gray-400 hover:text-blue-gray-500"
                           >
                             <span className="sr-only">Search</span>

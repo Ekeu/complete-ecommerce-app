@@ -15,14 +15,23 @@ const CheckoutUserInfoActions = ({
   setEnabledBilling,
   checkBoxId,
   register,
+  slotDescription,
   errors,
   setValue,
   isLocation,
   isContact,
+  isPayment,
   checkBoxHandler,
   checkBoxLabel,
 }) => {
   const { user } = useContext(UserContext)
+
+  const setEnabledContactAndShipping = () =>
+    setEnabledBilling(enabledBilling === selectedSlot ? false : selectedSlot)
+
+  const setEnabledPayment = () => setEnabledBilling(!enabledBilling)
+
+  const enabled = isPayment ? enabledBilling : enabledBilling === selectedSlot
 
   return (
     <>
@@ -30,21 +39,24 @@ const CheckoutUserInfoActions = ({
         {user.username !== 'Guest' && (
           <Slots
             selectedSlot={selectedSlot}
-            description={'Shipping'}
+            description={slotDescription}
             setSelectedSlot={setSelectedSlot}
             containerStyles={'bg-transparent px-0'}
           />
         )}
 
-        {!provideDifferentBillingOption && (
+        {!isPayment && !provideDifferentBillingOption && (
           <Toggle
             description={toggleDescription}
-            enabled={enabledBilling === selectedSlot}
-            setEnabled={() =>
-              setEnabledBilling(
-                enabledBilling === selectedSlot ? false : selectedSlot
-              )
-            }
+            enabled={enabled}
+            setEnabled={setEnabledContactAndShipping}
+          />
+        )}
+        {isPayment && !user.paymentMethods[selectedSlot].last4 && (
+          <Toggle
+            description={toggleDescription}
+            enabled={enabled}
+            setEnabled={setEnabledPayment}
           />
         )}
       </div>
@@ -68,7 +80,7 @@ const CheckoutUserInfoActions = ({
           />
         </div>
       )}
-      {enabledBilling !== selectedSlot && (
+      {enabledBilling !== selectedSlot && !isPayment && (
         <div className="mt-6 flex items-center">
           <input
             id={checkBoxId}

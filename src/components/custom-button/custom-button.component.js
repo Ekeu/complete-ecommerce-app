@@ -12,6 +12,7 @@ const CustomButton = forwardRef(
       success,
       successText,
       SuccessIcon,
+      spinnerColor='text-white',
       disabled,
       ...otherProps
     },
@@ -32,7 +33,7 @@ const CustomButton = forwardRef(
       } justify-center border rounded-md shadow-sm text-base font-medium font-hind focus:outline-none`}
     >
       {loading ? (
-        <Spinner size={'h-5 w-5'} color={'text-white'} />
+        <Spinner size={'h-5 w-5'} color={spinnerColor} />
       ) : success ? (
         <>
           <SuccessIcon className={'-ml-1 mr-3 h-5 w-5'} />

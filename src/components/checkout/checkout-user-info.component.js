@@ -3,6 +3,7 @@ import CheckoutDeliveryMethod from './checkout-delivery-method.component'
 import CheckoutUserInfoActions from './checkout-user-info-actions.component'
 import CheckoutUserInfoContact from './checkout-user-info-contact.component'
 import CheckoutUserInfoLocation from './checkout-user-info-location.component'
+import CheckoutUserInfoPayments from './checkout-user-info-payments.componsne'
 
 const CheckoutUserInfo = ({
   register,
@@ -15,6 +16,8 @@ const CheckoutUserInfo = ({
   setSelectedDetailsSlot,
   selectedLocationSlot,
   setSelectedLocationSlot,
+  selectedPaymentSlot,
+  setSelectedPaymentSlot,
   detailBilling,
   setDetailBilling,
   locationBilling,
@@ -30,6 +33,9 @@ const CheckoutUserInfo = ({
   setBillingDetails,
   billingLocation,
   setBillingLocation,
+  saveCard,
+  setSaveCard,
+  setCard,
 }) => {
   const handleCheckDifferentContactBilling = e => {
     setProvideDifferentDetailBilling(e.target.checked)
@@ -63,6 +69,7 @@ const CheckoutUserInfo = ({
           selectedSlot={selectedDetailsSlot}
           register={register}
           errors={errors}
+          slotDescription={'Shipping'}
           isContact={true}
           setSelectedSlot={setSelectedDetailsSlot}
           toggleDescription={'Use for billing'}
@@ -99,6 +106,7 @@ const CheckoutUserInfo = ({
           toggleDescription={'Use for billing'}
           register={register}
           errors={errors}
+          slotDescription={'Shipping'}
           setValue={setValue}
           isLocation={true}
           enabledBilling={locationBilling}
@@ -115,6 +123,28 @@ const CheckoutUserInfo = ({
           selectedDeliveryMethod={selectedDeliveryMethod}
           setSelectedDeliveryMethod={setSelectedDeliveryMethod}
         />
+      </div>
+
+      <div className="mt-10 border-t border-blue-gray-200 pt-10">
+        <h2 className="text-lg font-medium font-osans text-blue-gray-800">
+          Payment
+        </h2>
+        <CheckoutUserInfoPayments
+          selectedPaymentSlot={selectedPaymentSlot}
+          user={user}
+          setCard={setCard}
+        />
+        {user.jwt && (
+          <CheckoutUserInfoActions
+            selectedSlot={selectedPaymentSlot}
+            setSelectedSlot={setSelectedPaymentSlot}
+            slotDescription={'Saved cards'}
+            toggleDescription={'Save for future purchase'}
+            enabledBilling={saveCard}
+            isPayment={true}
+            setEnabledBilling={setSaveCard}
+          />
+        )}
       </div>
     </div>
   )

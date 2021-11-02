@@ -5,14 +5,14 @@ import { setUser } from '../../contexts/actions'
 
 import CustomButton from '../custom-button/custom-button.component'
 import { AUTH_COMPLETE_SVG } from '../../constants/auth.constants'
+import { navigate } from 'gatsby-link'
 
 const AuthComplete = ({ user, dispatch }) => {
-
   useEffect(() => {
     return () => {
-      dispatch(setUser({...user, onboarding: true}))
+      dispatch(setUser({ ...user, onboarding: true }))
     }
-  }, [])
+  }, [dispatch, user])
 
   return (
     <div className="text-center">
@@ -25,6 +25,7 @@ const AuthComplete = ({ user, dispatch }) => {
       </p>
       <div className="mt-6">
         <CustomButton
+          onClick={() => navigate('/hats')}
           type={'button'}
           customStyles={
             'inline-flex items-center px-4 py-2 border-transparent shadow-sm text-white bg-purple-600 hover:bg-purple-700'

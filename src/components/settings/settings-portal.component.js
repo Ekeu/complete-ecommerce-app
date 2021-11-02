@@ -4,6 +4,7 @@ import { Image } from 'cloudinary-react'
 import { UserContext } from '../../contexts'
 
 import UserSettings from './user-settings.component'
+import UserOrderHistory from './user-order-history.component'
 import SettingsSideNav from './settings-side-nav.component'
 
 const SettingsPortal = () => {
@@ -26,7 +27,8 @@ const SettingsPortal = () => {
     {
       id: 'adidas-ecom/account/order_history',
       label: 'Order History',
-      description: 'You can have a view on all your previous purchases',
+      component: UserOrderHistory,
+      description: 'Check the status of recent orders, manage returns, and download invoices.',
       color: 'text-emerald-400',
       gradient: {
         from: 'from-emerald-400',

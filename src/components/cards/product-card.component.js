@@ -1,13 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useQuery } from '@apollo/client'
 
 import { currencyFormatter } from '../../utils/functions'
 import Rating from '../rating/rating.component'
 import QuickView from '../product-list/quick-view.component'
+import { GET_INVENTORY_DETAILS, GET_REVIEWS } from '../../apollo/queries'
 
 const ProductCard = ({ product, variant }) => {
   const [open, setOpen] = useState(false)
+  const [rating, setRating] = useState(0)
+  const [reviews, setReviews] = useState(0)
   const imageURL = process.env.GATSBY_STRAPI_URL + variant.images[0].url
   const productName = product.node.name
+
+  const { data } = useQuery(GET_INVENTORY_DETAILS, {
+    variables: {
+      id: product.node.strapiId,
+    },
+  })
+
+  const { data: dataReviews } = useQuery(GET_REVIEWS, {
+    variables: {
+      id: product.node.strapiId,
+    },
+  })
+
+  useEffect(() => {
+    if (data) {
+      setRating(data.product.rating ? data.product.rating : 0)
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (dataReviews) {
+      setReviews(dataReviews.product.reviews)
+    }
+  }, [dataReviews])
   return (
     <>
       <div
@@ -35,9 +63,15 @@ const ProductCard = ({ product, variant }) => {
             </div>
           </h3>
           <div className="mt-3 flex flex-col items-center">
-            <p className="sr-only">4 out of 5 stars</p>
-            <Rating rating={4} productId={productName} customStyles={'mt-1'} />
-            <p className="mt-1 text-sm text-blue-gray-500">4 reviews</p>
+            <p className="sr-only">{rating} out of 5 stars</p>
+            <Rating
+              rating={rating}
+              productId={productName}
+              customStyles={'mt-1'}
+            />
+            <p className="mt-1 text-sm text-blue-gray-500">
+              {reviews.length} reviews
+            </p>
           </div>
           <p className="mt-4 text-base font-medium text-blue-gray-900">
             {currencyFormatter(variant.price)}
@@ -51,7 +85,7 @@ const ProductCard = ({ product, variant }) => {
         imageALT={productName}
         productName={productName}
         productPrice={variant.price}
-        productRating={4}
+        productRating={rating}
         product={product}
         variant={variant}
       />

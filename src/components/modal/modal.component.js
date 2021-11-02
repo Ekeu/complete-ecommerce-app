@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import ModalContent from './modal-content.component'
 
 const Modal = ({ modalOpen, setModalOpen, cancelButtonRef, children }) => {
   return (
