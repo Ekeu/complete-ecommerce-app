@@ -17,7 +17,6 @@ export const loadGoogleMapsPlacesObject = (
   )
   autocomplete.addListener('place_changed', () => {
     const place = autocomplete.getPlace()
-    console.log(place.address_components)
     setValue(zipId, place.address_components[6]?.long_name || '')
     setValue(cityId, place.address_components[2]?.long_name || '')
     setValue(stateId, place.address_components[4]?.long_name || '')

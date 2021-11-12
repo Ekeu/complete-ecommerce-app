@@ -12,8 +12,26 @@ const CreditCard = ({ card, user, setCard }) => {
   const { dispatch } = useContext(UserContext)
   const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
 
+  const userHasActiveSubscriptions = user.subscriptions.length > 0
+
   const removeCard = async () => {
     try {
+      const remainingSavedCards = user.paymentMethods.filter(
+        method => method.last4 !== ''
+      )
+
+      if (userHasActiveSubscriptions && remainingSavedCards.length === 1) {
+        dispatchFeedback(
+          setSnackbar({
+            status: 'error',
+            message:
+              'You cannot remove remove this card because you have an active subscription. Please add another card first.',
+          })
+        )
+
+        return
+      }
+
       setLoading(true)
       const res = await axios.post(
         process.env.GATSBY_STRAPI_URL + '/orders/remove-card',

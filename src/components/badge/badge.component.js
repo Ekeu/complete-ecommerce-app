@@ -1,10 +1,11 @@
 import React from 'react'
 
-const Badge = ({ children, styles, ...rest }) => {
+const Badge = ({ children, role, styles, ...rest }) => {
   return (
     <span
       {...rest}
-      className={`inline-flex items-center rounded-md text-sm font-medium ${styles}`}
+      role={role}
+      className={`inline-flex items-center rounded-md font-medium ${styles}`}
     >
       {children}
     </span>

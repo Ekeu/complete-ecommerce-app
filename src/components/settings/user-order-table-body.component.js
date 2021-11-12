@@ -1,6 +1,8 @@
 import React from 'react'
 import { currencyFormatter } from '../../utils/functions'
 
+import Badge from '../badge/badge.component'
+
 const UserOrderTableBody = ({ order }) => {
   return (
     <tbody className="border-b border-blue-gray-200 divide-y divide-gray-200 text-sm sm:border-t font-hind">
@@ -17,6 +19,11 @@ const UserOrderTableBody = ({ order }) => {
                 <div className="font-medium text-blue-gray-800">
                   {item.name}
                 </div>
+                {item.subscription && (
+                  <Badge styles="mt-1 px-2 py-0.5 text-xs font-hind bg-purple-100 text-purple-800">
+                    Subscribed
+                  </Badge>
+                )}
                 <div className="mt-1 sm:hidden">
                   {currencyFormatter(item.variant.price)}
                 </div>

@@ -32,6 +32,7 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
               style
               price
               gender
+              colorLabel
               images {
                 id
                 name
@@ -96,7 +97,7 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
         id: product.node.strapiId,
         description: product.node.description,
         variants: product.node.variants,
-        product
+        product,
       },
     })
   })

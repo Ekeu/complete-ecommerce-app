@@ -82,6 +82,7 @@ const ProductDetail = ({ pageContext }) => {
               <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
                 <ProductInfo
                   name={name}
+                  id={id}
                   description={description}
                   variants={variants}
                   specifications={specifications}

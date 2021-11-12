@@ -36,6 +36,7 @@ const CheckoutUserInfo = ({
   saveCard,
   setSaveCard,
   setCard,
+  cartHasSubscriptions,
 }) => {
   const handleCheckDifferentContactBilling = e => {
     setProvideDifferentDetailBilling(e.target.checked)
@@ -143,6 +144,7 @@ const CheckoutUserInfo = ({
             enabledBilling={saveCard}
             isPayment={true}
             setEnabledBilling={setSaveCard}
+            cartHasSubscriptions={cartHasSubscriptions}
           />
         )}
       </div>

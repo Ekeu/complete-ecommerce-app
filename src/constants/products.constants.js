@@ -45,3 +45,69 @@ export const PRODUCT_COLORS = {
     ringColor: 'ring-sky-300',
   },
 }
+
+export const PRODUCT_QUANTITY_OPTIONS = [
+  { value: 1, label: '1' },
+  { value: 2, label: '2' },
+  { value: 3, label: '3' },
+  { value: 4, label: '4' },
+  { value: 5, label: '5' },
+  { value: 6, label: '6' },
+  { value: 7, label: '7' },
+  { value: 8, label: '8' },
+  { value: 9, label: '9' },
+  { value: 10, label: '10' },
+]
+
+export const SUBS_FREQUENCIES = [
+  {
+    value: 'Week',
+    label: 'Week',
+    title: 'Week',
+    description: 'This product will be delivered weekly.',
+    current: true,
+  },
+  {
+    value: 'Two Weeks',
+    label: 'Two Weeks',
+    title: 'Two Weeks',
+    description: 'This product will be delivered every two weeks.',
+    current: false,
+  },
+  {
+    value: 'Month',
+    label: 'Month',
+    title: 'Month',
+    description: 'This product will be delivered monthly.',
+    current: false,
+  },
+  {
+    value: 'Two Months',
+    label: 'Two Months',
+    title: 'Two Months',
+    description: 'This product will be delivered every two months.',
+    current: false,
+  },
+  {
+    value: 'Year',
+    label: 'Year',
+    title: 'Year',
+    description: 'This product will be delivered annually.',
+    current: false,
+  },
+]
+
+export const QUANTITY_SUBS_CONFIG = {
+  required: {
+    value: true,
+    message: 'The quantity is required to subscribe.',
+  },
+  min: {
+    value: 10,
+    message: 'The minimum quantity to subscribe is 10',
+  },
+  max: {
+    value: 30,
+    message: 'The maximum quantity to subscribe is 30',
+  },
+}

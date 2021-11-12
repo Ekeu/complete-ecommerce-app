@@ -14,6 +14,10 @@ const FormInput = forwardRef(
       handlePaste,
       label,
       labelText,
+      labelClassName,
+      select,
+      onChange,
+      selectOptions,
       TrailingIcon,
       TrailingButton,
       error,
@@ -56,7 +60,7 @@ const FormInput = forwardRef(
           <div className="flex justify-between">
             <label
               htmlFor={label}
-              className="block text-sm font-medium text-blue-gray-700 font-hind"
+              className={`block text-sm font-medium text-blue-gray-700 font-hind ${labelClassName}`}
             >
               {labelText}
             </label>
@@ -68,7 +72,20 @@ const FormInput = forwardRef(
           </div>
         )}
         <div className="mt-1 relative flex rounded-md shadow-sm">
-          {multiline ? (
+          {select ? (
+            <select
+              {...register}
+              {...otherProps}
+              onChange={onChange}
+              className={defaultInputStyles}
+            >
+              {selectOptions.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          ) : multiline ? (
             <textarea
               {...otherProps}
               {...register}

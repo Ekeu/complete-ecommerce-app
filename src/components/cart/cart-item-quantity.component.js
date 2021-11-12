@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
+import { PRODUCT_QUANTITY_OPTIONS } from '../../constants/products.constants'
 import { CartContext } from '../../contexts'
 import { addToCart, removeFromCart } from '../../contexts/actions'
+import FormInput from '../form-input/form-input.component'
 
 const CartItemQuantity = ({ item }) => {
   const { dispatch } = useContext(CartContext)
@@ -12,6 +14,7 @@ const CartItemQuantity = ({ item }) => {
         Number(e.target.value),
         item.name,
         item.stock,
+        null,
         true
       )
     )
@@ -22,27 +25,21 @@ const CartItemQuantity = ({ item }) => {
   }
   return (
     <div className="mt-4 flex items-center sm:block sm:absolute sm:top-0 sm:left-1/2 sm:mt-0">
-      <label htmlFor={`quantity-${item.variant.id}`} className="sr-only">
-        Quantity, {item.name}
-      </label>
-      <select
+      <FormInput
         id={`quantity-${item.variant.id}`}
         name={`quantity-${item.variant.id}`}
-        onChange={handleAddToCart}
+        select
         value={item.quantity}
-        className="block max-w-full rounded-md border border-blue-gray-300 py-1.5 text-base leading-5 font-medium text-blue-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:text-sm cursor-pointer"
-      >
-        <option value={1}>1</option>
-        <option value={2}>2</option>
-        <option value={3}>3</option>
-        <option value={4}>4</option>
-        <option value={5}>5</option>
-        <option value={6}>6</option>
-        <option value={7}>7</option>
-        <option value={8}>8</option>
-        <option value={9}>9</option>
-        <option value={10}>10</option>
-      </select>
+        labelText={`Quantity, ${item.name}`}
+        labelClassName={'sr-only'}
+        label={`quantity-${item.variant.id}`}
+        onChange={handleAddToCart}
+        style={{ padding: '0.375rem  2.5rem 0.375rem 0.75rem' }}
+        inputStyles={
+          'block max-w-full leading-5 text-left cursor-pointer text-base'
+        }
+        selectOptions={PRODUCT_QUANTITY_OPTIONS}
+      />
 
       <button
         type="button"
