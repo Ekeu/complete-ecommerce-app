@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
-import { BadgeCheckIcon, BanIcon, TrashIcon } from '@heroicons/react/solid'
+import { TrashIcon } from '@heroicons/react/solid'
 import { CartContext } from '../../contexts'
 import { removeFromCart } from '../../contexts/actions'
+import Badge from '../badge/badge.component'
 
 const CheckoutItemInfoAndRemove = ({ item }) => {
   const { dispatch } = useContext(CartContext)
@@ -16,11 +17,6 @@ const CheckoutItemInfoAndRemove = ({ item }) => {
           <span className="font-medium text-blue-gray-700 hover:text-blue-gray-800">
             {item.name}
           </span>
-          {item.quantity > 0 ? (
-            <BadgeCheckIcon className={'h5 w-5 text-green-500'} />
-          ) : (
-            <BanIcon className={'h5 w-5 text-rose-500'} />
-          )}
         </h4>
         <p className="mt-1 text-sm text-blue-gray-500 capitalize">
           {item.variant.colorLabel}
@@ -29,6 +25,11 @@ const CheckoutItemInfoAndRemove = ({ item }) => {
         <p className="mt-1 text-purple-500 capitaliz text-sm">
           {item.variant.style}
         </p>
+        {item.subscription && (
+          <Badge styles="mt-1 px-2.5 py-0.5 text-sm bg-green-100 text-green-800">
+            Subscribed ( Every {item.subscription.toLowerCase()} )
+          </Badge>
+        )}
       </div>
 
       <div className="ml-4 flex-shrink-0 flow-root">

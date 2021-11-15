@@ -2,33 +2,19 @@ import React from 'react'
 import { Disclosure } from '@headlessui/react'
 import { FilterIcon } from '@heroicons/react/solid'
 
-import Filter from './filter.component'
 import FilterContainer from './filter-container.component'
-import Sort from './sort.component'
 import DescriptionContainer from './description-container.component'
+import AlgoliaSearchBox from '../algolia/algolia-search-box.component'
+import AlgoliaRefinementList from '../algolia/algolia-refinement-list.component'
+import AlgoliaSortBy from '../algolia/algolia-sort-by.component'
+import AlgoliaCurrentRefinements from '../algolia/algolia-current-refinements.component'
+import AlgoliaClearRefinements from '../algolia/algolia-clear-refinements.component'
 
-const DynamicToolbar = ({
-  filterOptions,
-  setFilterOptions,
-  sortOptions,
-  setSortOptions,
-  name,
-  activeFilters,
-  setActiveFilters,
-  description,
-}) => {
-  const handleClearFilters = () => {
-    let prvFilterOptions = { ...filterOptions }
-    for (const property in prvFilterOptions) {
-      prvFilterOptions[property].forEach(option => (option.checked = false))
-    }
-    setFilterOptions(prvFilterOptions)
-    setActiveFilters({})
-  }
-
+const DynamicToolbar = ({ name, description }) => {
   return (
     <>
       <DescriptionContainer name={name} description={description} />
+      <AlgoliaSearchBox />
       <Disclosure
         as="section"
         aria-labelledby="filter-heading"
@@ -45,49 +31,43 @@ const DynamicToolbar = ({
                   className="flex-none w-5 h-5 mr-2 text-blue-gray-400 group-hover:text-blue-gray-500"
                   aria-hidden="true"
                 />
-                {Object.values(activeFilters).flat().length} Filters
+                <AlgoliaCurrentRefinements />
               </Disclosure.Button>
             </div>
             <div className="pl-6">
-              <button
-                type="button"
-                onClick={handleClearFilters}
-                className="text-blue-gray-500"
-              >
-                Clear all
-              </button>
+              <AlgoliaClearRefinements />
             </div>
           </div>
         </div>
         <Disclosure.Panel className="border-t border-blue-gray-200 py-10">
           <div className="max-w-7xl mx-auto grid grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
             <FilterContainer>
-              <Filter
-                name={'Color'}
-                filterOptions={filterOptions}
-                setFilterOptions={setFilterOptions}
+              <AlgoliaRefinementList
+                label={'Color'}
+                attribute={'color'}
+                isColor
               />
-              <Filter
-                name={'Gender'}
-                filterOptions={filterOptions}
-                setFilterOptions={setFilterOptions}
-              />
+              <AlgoliaRefinementList label={'Gender'} attribute={'gender'} />
             </FilterContainer>
             <FilterContainer>
-              <Filter
-                name={'Size'}
-                filterOptions={filterOptions}
-                setFilterOptions={setFilterOptions}
-              />
-              <Filter
-                name={'Style'}
-                filterOptions={filterOptions}
-                setFilterOptions={setFilterOptions}
-              />
+              <AlgoliaRefinementList label={'Size'} attribute={'size'} />
+              <AlgoliaRefinementList label={'Style'} attribute={'style'} />
             </FilterContainer>
           </div>
         </Disclosure.Panel>
-        <Sort sortOptions={sortOptions} setSortOptions={setSortOptions} />
+        <AlgoliaSortBy
+          items={[
+            { value: 'const_variant', label: 'Rating' },
+            { value: 'const_variant_date_desc', label: 'Newest' },
+            { value: 'const_variant_date_asc', label: 'Oldest' },
+            { value: 'const_variant_price_asc', label: 'Price: Low to High' },
+            {
+              value: 'const_variant_price_desc',
+              label: 'Price: High to Low',
+            },
+          ]}
+          defaultRefinement={'const_variant'}
+        />
       </Disclosure>
     </>
   )

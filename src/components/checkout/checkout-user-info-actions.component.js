@@ -23,6 +23,7 @@ const CheckoutUserInfoActions = ({
   isPayment,
   checkBoxHandler,
   checkBoxLabel,
+  cartHasSubscriptions,
 }) => {
   const { user } = useContext(UserContext)
 
@@ -56,7 +57,9 @@ const CheckoutUserInfoActions = ({
           <Toggle
             description={toggleDescription}
             enabled={enabled}
-            setEnabled={setEnabledPayment}
+            setEnabled={
+              cartHasSubscriptions ? r => console.log(r) : setEnabledPayment
+            }
           />
         )}
       </div>

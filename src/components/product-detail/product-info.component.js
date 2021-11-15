@@ -28,6 +28,7 @@ export const getStockDisplay = (stock, variant) => {
 }
 
 const ProductInfo = ({
+  id,
   name,
   stock,
   description,
@@ -99,7 +100,6 @@ const ProductInfo = ({
 
   const stockDisplay = getStockDisplay(stock, selectedVariant)
 
-  console.log(rating)
   return (
     <>
       <h1 className={'text-3xl font-bold tracking-tight text-blue-gray-800'}>
@@ -159,6 +159,7 @@ const ProductInfo = ({
         stock={stock}
         selectedVariant={selectedVariant}
         productName={name}
+        productId={id}
         variants={variants}
       />
       <ProductDetails details={specifications.details} />

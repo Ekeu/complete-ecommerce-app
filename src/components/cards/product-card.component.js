@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
-
+import { Highlight } from 'react-instantsearch-dom'
 import { currencyFormatter } from '../../utils/functions'
 import Rating from '../rating/rating.component'
 import QuickView from '../product-list/quick-view.component'
 import { GET_INVENTORY_DETAILS, GET_REVIEWS } from '../../apollo/queries'
 
-const ProductCard = ({ product, variant }) => {
+const ProductCard = ({ product, variant, hit }) => {
   const [open, setOpen] = useState(false)
   const [rating, setRating] = useState(0)
   const [reviews, setReviews] = useState(0)
@@ -59,7 +59,7 @@ const ProductCard = ({ product, variant }) => {
           <h3 className={'text-sm font-medium font-hind text-blue-gray-800'}>
             <div className={'cursor-pointer'}>
               <span aria-hidden={'true'} className={'absolute inset-0'} />
-              {productName}
+              <Highlight hit={hit} attribute={'product.name'} />
             </div>
           </h3>
           <div className="mt-3 flex flex-col items-center">

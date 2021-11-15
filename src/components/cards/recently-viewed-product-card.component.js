@@ -1,13 +1,34 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { navigate } from 'gatsby'
 
 import { currencyFormatter, createSlug } from '../../utils/functions'
+import CustomButton from '../custom-button/custom-button.component'
+import { StarIcon } from '@heroicons/react/solid'
 
-const RecentlyViewedProductCard = ({ product, variant, hasGender }) => {
+const RecentlyViewedProductCard = ({
+  product,
+  variant,
+  hasGender,
+  onClick,
+  onClickFav,
+  favId,
+  buttonLabel,
+  loading,
+  success,
+  SuccessIcon,
+  successText,
+}) => {
   const imageURL = process.env.GATSBY_STRAPI_URL + variant.images[0].url
   const imageALT =
     process.env.GATSBY_STRAPI_URL + variant.images[0].alternativeText
   const productName = product.node.name
+
+  const navigateLink = `/${product.node.category.name.toLowerCase()}/${createSlug(
+    product.node.name
+  )}${hasGender && `?gender=${variant.gender}`}`
+
+  const navigateTo = () => navigate(navigateLink)
+
   return (
     <div>
       <div className="relative">
@@ -34,17 +55,35 @@ const RecentlyViewedProductCard = ({ product, variant, hasGender }) => {
           <p className="relative text-lg font-semibold text-white">
             {currencyFormatter(variant.price)}
           </p>
+          {favId && (
+            <CustomButton
+              type={'button'}
+              loading={loading}
+              disabled={!!loading}
+              onClick={onClickFav}
+              spinnerColor={'text-purple-500'}
+              customStyles={`m-4 absolute top-0 right-0 border-transparent shadow-none items-center`}
+            >
+              <StarIcon className="h-5 w-5 flex-shrink-0 bg-gradient-to-br from-yellow-400 to-orange-500 text-white" />
+            </CustomButton>
+          )}
         </div>
       </div>
       <div className="mt-6">
-        <Link
-          to={`/${product.node.category.name.toLowerCase()}/${createSlug(
-            product.node.name
-          )}${hasGender && `?gender=${variant.gender}`}`}
-          className="relative flex bg-blue-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium font-hind text-blue-gray-800 hover:bg-blue-gray-200"
+        <CustomButton
+          onClick={onClick ? onClick : navigateTo}
+          loading={loading}
+          success={success}
+          SuccessIcon={SuccessIcon}
+          successText={successText}
+          customStyles="relative flex bg-blue-gray-100 border-transparent py-2 px-8 items-center text-sm text-blue-gray-800 hover:bg-blue-gray-200 w-full shadow-none"
         >
-          View product<span className="sr-only">, {productName}</span>
-        </Link>
+          {buttonLabel || (
+            <>
+              View product<span className="sr-only">, {productName}</span>
+            </>
+          )}
+        </CustomButton>
       </div>
     </div>
   )

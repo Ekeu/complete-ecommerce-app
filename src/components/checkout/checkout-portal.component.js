@@ -38,12 +38,14 @@ const CheckoutPortal = () => {
   const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
   const { cart, dispatch: dispatchCart } = useContext(CartContext)
 
+  const cartHasSubscriptions = cart.some(item => item.subscription)
+
   const [selectedLocationSlot, setSelectedLocationSlot] = useState(0)
   const [selectedDetailsSlot, setSelectedDetailsSlot] = useState(0)
   const [selectedPaymentSlot, setSelectedPaymentSlot] = useState(0)
   const [detailBilling, setDetailBilling] = useState(false)
   const [locationBilling, setLocationBilling] = useState(false)
-  const [saveCard, setSaveCard] = useState(false)
+  const [saveCard, setSaveCard] = useState(cartHasSubscriptions)
   const [card, setCard] = useState({
     brand: '',
     last4: '',
@@ -463,6 +465,7 @@ const CheckoutPortal = () => {
             saveCard={saveCard}
             setSaveCard={setSaveCard}
             setCard={setCard}
+            cartHasSubscriptions={cartHasSubscriptions}
           />
           <CheckoutOrder
             loading={

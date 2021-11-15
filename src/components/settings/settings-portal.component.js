@@ -5,7 +5,9 @@ import { UserContext } from '../../contexts'
 
 import UserSettings from './user-settings.component'
 import UserOrderHistory from './user-order-history.component'
+import UserFavorites from './user-favorites.component'
 import SettingsSideNav from './settings-side-nav.component'
+import UserSubscriptions from './user-subscriptions.component'
 
 const SettingsPortal = () => {
   const { user } = useContext(UserContext)
@@ -28,7 +30,8 @@ const SettingsPortal = () => {
       id: 'adidas-ecom/account/order_history',
       label: 'Order History',
       component: UserOrderHistory,
-      description: 'Check the status of recent orders, manage returns, and download invoices.',
+      description:
+        'Check the status of recent orders, manage returns, and download invoices.',
       color: 'text-emerald-400',
       gradient: {
         from: 'from-emerald-400',
@@ -38,7 +41,8 @@ const SettingsPortal = () => {
     {
       id: 'adidas-ecom/account/favorites',
       label: 'Favorites',
-      description: 'See all your favorites products',
+      component: UserFavorites,
+      description: 'See and manage all your favorite products',
       color: 'text-orange-500',
       gradient: {
         from: 'from-yellow-400',
@@ -48,7 +52,8 @@ const SettingsPortal = () => {
     {
       id: 'adidas-ecom/account/subscriptions',
       label: 'Subscriptions',
-      description: 'See all your psubscriptions',
+      component: UserSubscriptions,
+      description: 'Manage all your subscriptions',
       color: 'text-rose-500',
       gradient: {
         from: 'from-pink-500',

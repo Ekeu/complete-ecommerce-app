@@ -2,15 +2,10 @@ import React, { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
+import { connectSortBy } from 'react-instantsearch-dom'
 import { classNames } from '../../utils/functions'
 
-const Sort = ({ sortOptions, setSortOptions }) => {
-  const handleSort = index => {
-    const newSortOptions = [...sortOptions]
-    newSortOptions.forEach(sortOption => (sortOption.current = false))
-    newSortOptions[index].current = true
-    setSortOptions(newSortOptions)
-  }
+const SortBy = ({ items, refine }) => {
   return (
     <div className="col-start-1 row-start-1 py-4 font-hind">
       <div className="flex justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,20 +31,20 @@ const Sort = ({ sortOptions, setSortOptions }) => {
           >
             <Menu.Items className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="py-1">
-                {sortOptions.map((option, index) => (
-                  <Menu.Item key={option.name}>
+                {items.map(item => (
+                  <Menu.Item key={item.label}>
                     {({ active }) => (
                       <span
-                        onClick={() => handleSort(index)}
+                        onClick={() => refine(item.value)}
                         className={classNames(
-                          option.current
+                          item.isRefined
                             ? 'font-medium text-blue-gray-900'
                             : 'text-blue-gray-500',
                           active ? 'bg-blue-gray-100' : '',
                           'block px-4 py-2 text-sm cursor-pointer'
                         )}
                       >
-                        {option.name}
+                        {item.label}
                       </span>
                     )}
                   </Menu.Item>
@@ -63,4 +58,6 @@ const Sort = ({ sortOptions, setSortOptions }) => {
   )
 }
 
-export default Sort
+const AlgoliaSortBy = connectSortBy(SortBy)
+
+export default AlgoliaSortBy
