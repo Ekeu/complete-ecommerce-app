@@ -1,10 +1,27 @@
-const colors = require('tailwindcss/colors');
+const colors = require('tailwindcss/colors')
 
 module.exports = {
+  mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      keyframes: {
+        wiggle: {
+          '0%, 60%': {
+            transform: 'rotate(-5deg)',
+          },
+          '35%, 100%': {
+            transform: 'rotate(5deg)',
+          },
+          '60%': {
+            transform: 'rotate(-5deg)',
+          },
+        },
+      },
+      animation: {
+        wiggle: 'wiggle 0.5s ease-in-out',
+      },
       fontFamily: {
         hind: ['Hind', 'sans-serif'],
         osans: ['Open Sans', 'sans-serif'],

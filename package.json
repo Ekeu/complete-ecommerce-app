@@ -5,6 +5,10 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "@algolia/autocomplete-js": "^1.5.0",
+    "@algolia/autocomplete-plugin-algolia-insights": "^1.5.0",
+    "@algolia/autocomplete-plugin-query-suggestions": "^1.5.0",
+    "@algolia/autocomplete-theme-classic": "^1.5.0",
     "@apollo/client": "^3.2.9",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
@@ -40,6 +44,7 @@
     "react-spring": "^9.2.6",
     "react-star-ratings": "^2.3.0",
     "react-toastify": "^8.0.3",
+    "search-insights": "^2.1.0",
     "slugify": "^1.6.0",
     "uuid": "^8.3.2"
   },

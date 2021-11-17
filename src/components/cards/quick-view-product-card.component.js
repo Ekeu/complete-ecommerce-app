@@ -13,6 +13,7 @@ import ProductReviews from '../product/product-reviews.component'
 import ProductSizes from '../product/product-sizes.component'
 import ProductColors from '../product/product-colors.component'
 import CustomButton from '../custom-button/custom-button.component'
+import { useLocation } from '@reach/router'
 
 const QuickViewProductCard = ({
   imageURL,
@@ -34,6 +35,8 @@ const QuickViewProductCard = ({
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const location = useLocation()
+
   const possibleSizes = ['XS', 'S', 'M', 'L', 'XL', '2XL']
   const actualSizes = possibleSizes
     .filter(size => new Set(productSizes).has(size))
@@ -44,11 +47,21 @@ const QuickViewProductCard = ({
   const selectedColorImageURL =
     imageIndex !== -1
       ? process.env.GATSBY_STRAPI_URL +
-        product.node.variants[imageIndex].images[0].url
+        product.node.variants?.[imageIndex]?.images[0].url
       : imageURL
 
-  const selectedVariant =
-    imageIndex === -1 ? product.node.variants.indexOf(variant) : imageIndex
+  let selectedVariant
+
+  if (location.pathname === '/search') {
+    const s_variant = product.node.variants.find(
+      pvariant => pvariant.id === variant.id
+    )
+    selectedVariant =
+      imageIndex === -1 ? product.node.variants?.indexOf(s_variant) : imageIndex
+  } else {
+    selectedVariant =
+      imageIndex === -1 ? product.node.variants?.indexOf(variant) : imageIndex
+  }
 
   const stockDisplay = getStockDisplay(stock, selectedVariant)
 
@@ -84,7 +97,7 @@ const QuickViewProductCard = ({
           aria-hidden="true"
         >
           <Link
-            to={`/${product.node.category.name.toLowerCase()}/${createSlug(
+            to={`/${product.node.category?.name.toLowerCase()}/${createSlug(
               product.node.name
             )}${hasGender && `?gender=${variant.gender}`}`}
             className={
@@ -139,7 +152,7 @@ const QuickViewProductCard = ({
               selectedSize={selectedSize}
               setSelectedSize={setSelectedSize}
               stockDisplay={stockDisplay}
-              quantity={stock && stock[selectedVariant].quantity}
+              quantity={stock && stock[selectedVariant]?.quantity}
             />
             <CustomButton
               type={'button'}
@@ -156,7 +169,7 @@ const QuickViewProductCard = ({
             </CustomButton>
             <p className="absolute top-4 left-4 text-center sm:static sm:mt-8">
               <Link
-                to={`/${product.node.category.name.toLowerCase()}/${createSlug(
+                to={`/${product.node.category?.name.toLowerCase()}/${createSlug(
                   product.node.name
                 )}${hasGender && `?gender=${variant.gender}`}`}
                 className="font-medium font-hind text-purple-600 hover:text-purple-500"

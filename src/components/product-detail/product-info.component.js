@@ -19,10 +19,10 @@ export const getStockDisplay = (stock, variant) => {
     case -1:
       return 'Error loading inventory.'
     default:
-      if (stock[variant].quantity === 0) {
+      if (stock[variant]?.quantity === 0) {
         return 'Out of stock!'
       } else {
-        return `${stock[variant].quantity} left in stock.`
+        return `${stock[variant]?.quantity} left in stock.`
       }
   }
 }
