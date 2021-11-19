@@ -1,6 +1,7 @@
 import React, { createElement, Fragment, useEffect, useRef } from 'react'
 import { render } from 'react-dom'
 import { autocomplete } from '@algolia/autocomplete-js'
+import { navigate } from 'gatsby-link'
 
 const AlgoliaAutocomplete = props => {
   const containerRef = useRef(null)
@@ -18,6 +19,11 @@ const AlgoliaAutocomplete = props => {
       },
       render({ children }, root) {
         render(children, root)
+      },
+      navigator: {
+        navigate({ itemUrl }) {
+          navigate(itemUrl)
+        },
       },
       ...props,
     })

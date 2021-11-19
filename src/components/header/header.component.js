@@ -87,7 +87,7 @@ const Header = ({ categories }) => {
 
                   <div className="flex-1 flex items-center justify-end">
                     <div className="flex items-center lg:ml-8 w-full justify-end">
-                      <div className="relative flex items-center space-x-8 justify-between w-full">
+                      <div className="relative flex items-center space-x-8 justify-between sm:w-full">
                         <div className="hidden lg:flex lg:justify-end w-full">
                           <Search />
                         </div>

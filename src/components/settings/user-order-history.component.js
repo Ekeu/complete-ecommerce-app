@@ -1,36 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useContext } from 'react'
 import { UserContext } from '../../contexts'
-import UserOrderHeader from './user-order-header.component'
-import UserOrderTable from './user-order-table.component'
+import { InstantSearch, Pagination, Configure } from 'react-instantsearch-dom'
+import algoliasearch from 'algoliasearch'
+import AlgoliaOrderHits from '../algolia/algolia-order-hits.component'
+
+const searchClient = algoliasearch(
+  process.env.GATSBY_ALGOLIA_APPLICATION_ID,
+  process.env.GATSBY_ALGOLIA_SEARCH_ONLY_API_KEY
+)
 
 const UserOrderHistory = () => {
-  const [orders, setOrders] = useState([])
-
   const { user } = useContext(UserContext)
 
-  useEffect(() => {
-    axios
-      .get(process.env.GATSBY_STRAPI_URL + '/orders/history', {
-        headers: {
-          Authorization: `Bearer ${user.jwt}`,
-        },
-      })
-      .then(res => {
-        setOrders(res.data.orders)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
+  const searchParameters = {
+    filters: `user.id:${user?.id}`,
+    clickAnalytics: true,
+    hitsPerPage: 3,
+  }
+
   return (
     <div className="space-y-20">
-      {orders.map(order => (
-        <div key={order.id}>
-          <UserOrderHeader order={order} />
-          <UserOrderTable order={order} />
+      <InstantSearch searchClient={searchClient} indexName="const_order">
+        <Configure {...searchParameters} />
+        <AlgoliaOrderHits />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-hind flex justify-center">
+          <Pagination />
         </div>
-      ))}
+      </InstantSearch>
     </div>
   )
 }

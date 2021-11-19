@@ -98,6 +98,10 @@ const ProductInfo = ({
     }
   }, [imageIndex])
 
+  useEffect(() => {
+    setSelectedSize(variants[selectedVariant].size)
+  }, [selectedVariant])
+
   const stockDisplay = getStockDisplay(stock, selectedVariant)
 
   return (
