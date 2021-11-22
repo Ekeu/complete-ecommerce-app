@@ -20,7 +20,13 @@ const CreditCard = ({ card, user, setCard }) => {
         method => method.last4 !== ''
       )
 
-      if (userHasActiveSubscriptions && remainingSavedCards.length === 1) {
+      const subscriptionPaymentMethod = user.subscriptions.find(
+        subscription => subscription.paymentMethod.last4 === card.last4
+      )
+      if (
+        (userHasActiveSubscriptions && remainingSavedCards.length === 1) ||
+        subscriptionPaymentMethod
+      ) {
         dispatchFeedback(
           setSnackbar({
             status: 'error',

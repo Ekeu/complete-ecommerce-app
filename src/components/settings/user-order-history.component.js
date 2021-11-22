@@ -1,33 +1,77 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import axios from 'axios'
 import { UserContext } from '../../contexts'
-import { InstantSearch, Pagination, Configure } from 'react-instantsearch-dom'
-import algoliasearch from 'algoliasearch'
-import AlgoliaOrderHits from '../algolia/algolia-order-hits.component'
-
-const searchClient = algoliasearch(
-  process.env.GATSBY_ALGOLIA_APPLICATION_ID,
-  process.env.GATSBY_ALGOLIA_SEARCH_ONLY_API_KEY
-)
+import UserOrderHeader from './user-order-header.component'
+import UserOrderTable from './user-order-table.component'
+import Pagination from '../pagination/pagination.component'
+import Message from '../message/message.component'
+import { ShoppingBagIcon, ClockIcon } from '@heroicons/react/solid'
+import { navigate } from 'gatsby-link'
 
 const UserOrderHistory = () => {
+  const [orders, setOrders] = useState([])
+  const [page, setPage] = useState(0)
+
   const { user } = useContext(UserContext)
 
-  const searchParameters = {
-    filters: `user.id:${user?.id}`,
-    clickAnalytics: true,
-    hitsPerPage: 3,
-  }
+  useEffect(() => {
+    axios
+      .get(process.env.GATSBY_STRAPI_URL + '/orders/history', {
+        headers: {
+          Authorization: `Bearer ${user.jwt}`,
+        },
+      })
+      .then(res => {
+        setOrders(res.data.orders)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }, [])
+
+  const itemsCountPerPage = 3
+  const totalItemsCount = Math.ceil(orders.length / itemsCountPerPage)
 
   return (
-    <div className="space-y-20">
-      <InstantSearch searchClient={searchClient} indexName="const_order">
-        <Configure {...searchParameters} />
-        <AlgoliaOrderHits />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 font-hind flex justify-center">
-          <Pagination />
-        </div>
-      </InstantSearch>
-    </div>
+    <>
+      {orders.length ? (
+        <>
+          <div className="space-y-20">
+            {orders
+              .slice(
+                (page + 1 - 1) * itemsCountPerPage,
+                (page + 1) * itemsCountPerPage
+              )
+              .map(order => (
+                <div key={order.id}>
+                  <UserOrderHeader order={order} />
+                  <UserOrderTable order={order} />
+                </div>
+              ))}
+          </div>
+          <Pagination
+            pageCount={totalItemsCount}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            onPageChange={({ selected }) => setPage(selected)}
+          />
+        </>
+      ) : (
+        <Message
+          headline={'0 items'}
+          description={
+            'You have not yet made an order. Start shopping and make your first order!'
+          }
+          MessageIconComponent={ClockIcon}
+          ButtonIconComponent={ShoppingBagIcon}
+          buttonText={'Go Shopping'}
+          onButtonClick={() => navigate('/hats')}
+          buttonBackgroundStyle={
+            'bg-gradient-to-br from-emerald-400 to-cyan-500'
+          }
+        />
+      )}
+    </>
   )
 }
 

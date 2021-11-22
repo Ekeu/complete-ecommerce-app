@@ -4,15 +4,34 @@ import { CheckIcon, ShoppingBagIcon } from '@heroicons/react/outline'
 
 import { createSlug, currencyFormatter } from '../../utils/functions'
 import Rating from '../rating/rating.component'
-import { addToCart } from '../../contexts/actions'
+import { addToCart, setSnackbar } from '../../contexts/actions'
 import { navigate } from 'gatsby-link'
 
 const guestToken = uuidv4()
 
-const AlgoliaProductItem = ({ hit, insights, components, user, dispatch }) => {
+const AlgoliaProductItem = ({
+  hit,
+  insights,
+  components,
+  user,
+  cart,
+  dispatch,
+  dispatchFeedback,
+}) => {
   const [success, setSuccess] = useState(false)
 
   const handleAddToCart = () => {
+    const checkVariant = cart.find(product => product.variant.id === hit.id)
+    if (checkVariant?.quantity >= 10) {
+      setSuccess(false)
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'Limited to 10 item(s) per purchase',
+        })
+      )
+      return
+    }
     setSuccess(true)
     dispatch(addToCart(hit, 1, hit?.product.name, hit.quantity))
   }

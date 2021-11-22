@@ -7,7 +7,7 @@ import { createAlgoliaInsightsPlugin } from '@algolia/autocomplete-plugin-algoli
 import { createQuerySuggestionsPlugin } from '@algolia/autocomplete-plugin-query-suggestions'
 
 import AlgoliaProductItem from '../algolia/algolia-product-item.component'
-import { CartContext, UserContext } from '../../contexts'
+import { CartContext, FeedbackContext, UserContext } from '../../contexts'
 import { navigate } from 'gatsby-link'
 import { createSlug } from '../../utils/functions'
 
@@ -36,7 +36,8 @@ const querySuggestionsPLugin = createQuerySuggestionsPlugin({
 
 const Search = () => {
   const { user } = useContext(UserContext)
-  const { dispatch } = useContext(CartContext)
+  const { cart, dispatch } = useContext(CartContext)
+  const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
   return (
     <>
       <AlgoliaAutocomplete
@@ -114,6 +115,8 @@ const Search = () => {
                     <AlgoliaProductItem
                       hit={item}
                       user={user}
+                      cart={cart}
+                      dispatchFeedback={dispatchFeedback}
                       dispatch={dispatch}
                       components={components}
                       insights={state.context.algoliaInsightsPlugin.insights}

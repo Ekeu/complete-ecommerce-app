@@ -13,7 +13,7 @@ export default function cartReducer(state, action) {
 
   if (action.payload) {
     existingIndex = state.findIndex(
-      item => item.variant === action.payload.variant
+      item => item.variant.id === action.payload.variant.id
     )
   }
 
@@ -38,6 +38,7 @@ export default function cartReducer(state, action) {
         newCart[existingIndex] = {
           ...newCart[existingIndex],
           quantity: newQuantity,
+          subscription: action.payload.subscription,
         }
       } else {
         newCart.push(action.payload)

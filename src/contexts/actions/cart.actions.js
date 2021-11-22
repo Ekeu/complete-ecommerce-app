@@ -11,7 +11,7 @@ export const addToCart = (
   quantity,
   name,
   stock,
-  subscription,
+  subscription = null,
   fromCart = false
 ) => ({
   type: ADD_TO_CART,

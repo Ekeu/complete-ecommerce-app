@@ -83,7 +83,7 @@ const CheckoutPortal = () => {
     (acc, item) => acc + item.variant.price * item.quantity,
     0
   )
-  const tax = subtotal * 0.2
+  const tax = (subtotal + selectedDeliveryMethod.price) * 0.2
   const total = subtotal + tax + selectedDeliveryMethod.price
 
   const cartPricingInfos = [

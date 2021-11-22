@@ -32,7 +32,7 @@ const Subscription = ({
 }) => {
   const cancelButtonRef = useRef(null)
   const { user, dispatch } = useContext(UserContext)
-  const { dispatch: dispatchCart } = useContext(CartContext)
+  const { cart, dispatch: dispatchCart } = useContext(CartContext)
   const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
   const [open, setOpen] = useState(false)
 
@@ -40,7 +40,9 @@ const Subscription = ({
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm()
+  } = useForm({
+    mode: 'all',
+  })
 
   let buttonLocationClassName
   let iconLocationClassName
@@ -54,6 +56,21 @@ const Subscription = ({
   }
 
   const onSubmit = handleSubmit(async ({ sub_qty, sub_frq }) => {
+    const checkVariant = cart.find(product => product.variant.id === variant.id)
+    if (
+      checkVariant?.quantity >= 10 ||
+      checkVariant?.quantity + Number(sub_qty) >= 10
+    ) {
+      setOpen(false)
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'Limited to 10 item(s) per purchase',
+        })
+      )
+      return
+    }
+
     dispatchCart(
       addToCart(variant, Number(sub_qty), productName, stockQuantity, sub_frq)
     )
@@ -123,7 +140,7 @@ const Subscription = ({
                     id={`sub_qty`}
                     name={`sub_qty`}
                     type={'number'}
-                    placeholder={'Ex: 20'}
+                    placeholder={'Ex: 10'}
                     register={register('sub_qty', { ...QUANTITY_SUBS_CONFIG })}
                     labelText={`Quantity`}
                     label={`quantity`}

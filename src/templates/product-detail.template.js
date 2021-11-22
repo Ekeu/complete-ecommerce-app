@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useQuery } from '@apollo/client'
+
+import { UserContext, FeedbackContext } from '../contexts'
+import { setSnackbar } from '../contexts/actions'
 
 import Layout from '../components/layout/layout.component'
 import ProductImages from '../components/product-detail/product-images.component'
@@ -9,7 +12,7 @@ import ProductReviews from '../components/product-detail/product-reviews.compone
 
 import { GET_INVENTORY_DETAILS } from '../apollo/queries'
 
-const ProductDetail = ({ pageContext }) => {
+const ProductDetail = ({ pageContext, location }) => {
   const { id, name, description, variants, specifications, product } =
     pageContext
 
@@ -19,9 +22,29 @@ const ProductDetail = ({ pageContext }) => {
   const [rating, setRating] = useState(0)
   const [edit, setEdit] = useState(false)
 
+  const { user } = useContext(UserContext)
+  const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
+
   const { error, data } = useQuery(GET_INVENTORY_DETAILS, {
     variables: { id },
   })
+
+  const handleEditReview = () => {
+    if (user.username === 'Guest') {
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'You must be logged in to leave a review',
+        })
+      )
+      return
+    }
+    setEdit(true)
+    const reviewFormRef = document.getElementById('reviews-heading')
+    reviewFormRef.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
 
   useEffect(() => {
     if (error) {
@@ -68,6 +91,12 @@ const ProductDetail = ({ pageContext }) => {
     setSelectedVariant(variantIndex)
   }, [])
 
+  useEffect(() => {
+    if (location.state.review) {
+      handleEditReview()
+    }
+  }, [])
+
   return (
     <Layout>
       <div className="bg-white">
@@ -90,11 +119,16 @@ const ProductDetail = ({ pageContext }) => {
                   setSelectedVariant={setSelectedVariant}
                   stock={stock}
                   rating={rating}
-                  setEdit={setEdit}
+                  handleEditReview={handleEditReview}
                 />
               </div>
             </div>
-            <ProductReviews product={id} edit={edit} setEdit={setEdit} />
+            <ProductReviews
+              product={id}
+              edit={edit}
+              setEdit={setEdit}
+              handleEditReview={handleEditReview}
+            />
             <RecentlyViewedProducts
               products={JSON.parse(
                 localStorage.getItem('recentlyViewedProducts')

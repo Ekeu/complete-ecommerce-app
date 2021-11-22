@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { CalendarIcon } from '@heroicons/react/outline'
 
-import { CartContext } from '../../contexts'
-import { addToCart } from '../../contexts/actions'
+import { CartContext, FeedbackContext } from '../../contexts'
+import { addToCart, setSnackbar } from '../../contexts/actions'
 
 import CustomButton from '../custom-button/custom-button.component'
 import Favorite from '../favorite/favorite.component'
@@ -18,10 +18,25 @@ const ProductActionButtons = ({
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const { dispatch } = useContext(CartContext)
+  const { cart, dispatch } = useContext(CartContext)
+  const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
 
   const handleAddToCart = () => {
     setLoading(true)
+    const checkVariant = cart.find(
+      product => product.variant.id === variants[selectedVariant].id
+    )
+    if (checkVariant?.quantity >= 10) {
+      setLoading(false)
+      setSuccess(false)
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'Limited to 10 item(s) per purchase',
+        })
+      )
+      return
+    }
     setLoading(false)
     setSuccess(true)
     dispatch(

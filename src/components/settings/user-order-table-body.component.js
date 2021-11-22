@@ -1,14 +1,25 @@
 import React, { useContext } from 'react'
-import { CartContext } from '../../contexts'
-import { addToCart } from '../../contexts/actions'
+import { CartContext, FeedbackContext } from '../../contexts'
+import { addToCart, setSnackbar } from '../../contexts/actions'
 import { currencyFormatter } from '../../utils/functions'
 
 import Badge from '../badge/badge.component'
 
 const UserOrderTableBody = ({ order }) => {
-  const { dispatch } = useContext(CartContext)
+  const { cart, dispatch } = useContext(CartContext)
+  const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
 
   const handleAddToCart = product => {
+    const checkVariant = cart.find(p => p.variant.id === product.id)
+    if (checkVariant?.quantity >= 10) {
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'Limited to 10 item(s) per purchase',
+        })
+      )
+      return
+    }
     dispatch(addToCart(product.variant, 1, product.variant.quantity))
   }
   return (

@@ -5,8 +5,8 @@ import { CheckCircleIcon } from '@heroicons/react/solid'
 import { currencyFormatter, createSlug } from '../../utils/functions'
 import { colorIndex } from '../../utils/product'
 
-import { CartContext } from '../../contexts'
-import { addToCart } from '../../contexts/actions'
+import { CartContext, FeedbackContext } from '../../contexts'
+import { addToCart, setSnackbar } from '../../contexts/actions'
 
 import { getStockDisplay } from '../product-detail/product-info.component'
 import ProductReviews from '../product/product-reviews.component'
@@ -65,10 +65,23 @@ const QuickViewProductCard = ({
 
   const stockDisplay = getStockDisplay(stock, selectedVariant)
 
-  const { dispatch } = useContext(CartContext)
+  const { cart, dispatch } = useContext(CartContext)
+  const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
 
   const handleAddToCart = () => {
     setLoading(true)
+    const checkVariant = cart.find(product => product.variant.id === variant.id)
+    if (checkVariant?.quantity >= 10) {
+      setLoading(false)
+      setSuccess(false)
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'Limited to 10 item(s) per purchase',
+        })
+      )
+      return
+    }
     setLoading(false)
     setSuccess(true)
     dispatch(
@@ -83,6 +96,10 @@ const QuickViewProductCard = ({
     }
     return () => clearTimeout(timer)
   }, [success])
+
+  const productURL = `/${product.node.category?.name.toLowerCase()}/${createSlug(
+    product.node.name
+  )}${hasGender && `?gender=${variant.gender}`}`
 
   return (
     <>
@@ -129,9 +146,13 @@ const QuickViewProductCard = ({
               <span className="text-blue-gray-300" aria-hidden="true">
                 &middot;
               </span>
-              <span className="ml-4 text-sm font-semibold font-osans text-purple-600 hover:text-purple-500">
+              <Link
+                to={productURL}
+                state={{ review: true }}
+                className="ml-4 text-sm font-semibold font-osans text-purple-600 hover:text-purple-500"
+              >
                 Leave a review
-              </span>
+              </Link>
             </div>
           </ProductReviews>
         </section>
@@ -169,9 +190,7 @@ const QuickViewProductCard = ({
             </CustomButton>
             <p className="absolute top-4 left-4 text-center sm:static sm:mt-8">
               <Link
-                to={`/${product.node.category?.name.toLowerCase()}/${createSlug(
-                  product.node.name
-                )}${hasGender && `?gender=${variant.gender}`}`}
+                to={productURL}
                 className="font-medium font-hind text-purple-600 hover:text-purple-500"
               >
                 View full details

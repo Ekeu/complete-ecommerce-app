@@ -39,7 +39,7 @@ const Layout = ({ children }) => {
             />
           </Helmet>
           <Header categories={data.allStrapiCategory.edges} />
-          <main>{children}</main>
+          <main className={'pb-12 lg:pb-24'}>{children}</main>
           <Footer />
         </>
       )}
