@@ -17,7 +17,7 @@ const ThankyouHeader = ({ order }) => {
       <dl className="mt-16 text-sm font-medium font-hind">
         <dt className="text-blue-gray-800">Tracking number</dt>
         <dd className="mt-2 text-purple-600 uppercase">
-          {order?.id.slice(order?.id.length - 14, order?.id.length)}
+          {order?.id.slice(order?.id.length - 8, order?.id.length)}
         </dd>
       </dl>
     </>

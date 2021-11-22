@@ -11,15 +11,15 @@ const Hits = ({ hits, products }) => {
       {hits.length ? (
         <ListOfProductsGrid>
           {hits.map(hit => {
-            const product = products.find(
-              product => product.node.strapiId === hit.product.id
+            const product = products?.find(
+              product => product?.node.strapiId === hit.product.id
             )
             const hitProduct = {
               node: {
                 ...hit.product,
                 strapiId: hit.product.id,
-                variants: product.node.variants,
-                category: product.node.category,
+                variants: product?.node.variants,
+                category: product?.node.category,
               },
             }
             return (

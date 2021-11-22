@@ -12,7 +12,7 @@ const UserOrderHeader = ({ order }) => {
           <div className="flex justify-between sm:block font-hind">
             <dt className="font-medium text-blue-gray-800">Date placed</dt>
             <dd className="sm:mt-1">
-              <span>{moment(order.updatedAt).format('MMM Do YY')}</span>
+              <span>{moment(order.createdAt).format('MMM Do YY')}</span>
             </dd>
           </div>
           <div className="flex font-hind justify-between pt-6 sm:block sm:pt-0">

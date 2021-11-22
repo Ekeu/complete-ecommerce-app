@@ -40,7 +40,7 @@ const SettingsPortal = () => {
     },
     {
       id: 'adidas-ecom/account/favorites',
-      label: 'Favorites',
+      label: 'Wishlist',
       component: UserFavorites,
       description: 'See and manage all your favorite products',
       color: 'text-orange-500',
@@ -89,10 +89,7 @@ const SettingsPortal = () => {
             </p>
           </div>
           {!selectedOption && (
-            <ul
-              role="list"
-              className="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-2 lg:gap-x-8"
-            >
+            <ul className="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-2 lg:gap-x-8">
               {options.map(option => (
                 <li
                   key={option.id}

@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { CartContext, FeedbackContext } from '../../contexts'
+import { addToCart, setSnackbar } from '../../contexts/actions'
 import { currencyFormatter } from '../../utils/functions'
 
 import Badge from '../badge/badge.component'
 
 const UserOrderTableBody = ({ order }) => {
+  const { cart, dispatch } = useContext(CartContext)
+  const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
+
+  const handleAddToCart = product => {
+    const checkVariant = cart.find(p => p.variant.id === product.id)
+    if (checkVariant?.quantity >= 10) {
+      dispatchFeedback(
+        setSnackbar({
+          status: 'error',
+          message: 'Limited to 10 item(s) per purchase',
+        })
+      )
+      return
+    }
+    dispatch(addToCart(product.variant, 1, product.variant.quantity))
+  }
   return (
     <tbody className="border-b border-blue-gray-200 divide-y divide-gray-200 text-sm sm:border-t font-hind">
       {order.items.map(item => (
@@ -37,7 +55,10 @@ const UserOrderTableBody = ({ order }) => {
             {order.status}
           </td>
           <td className="py-6 font-medium text-right whitespace-nowrap">
-            <span className="text-purple-600">
+            <span
+              className="text-purple-600 cursor-pointer"
+              onClick={() => handleAddToCart(item)}
+            >
               Buy<span className="hidden lg:inline"> again</span>
             </span>
           </td>

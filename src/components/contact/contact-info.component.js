@@ -25,11 +25,10 @@ const ContactInfo = () => {
           <span className="ml-3">ulrich.ekeu.pro@gmail.com</span>
         </dd>
       </dl>
-      <ul role="list" className="mt-8 flex space-x-4">
-        {SOCIAL_ICONS_LINKS.map(item => (
-          <li>
+      <ul className="mt-8 flex space-x-4">
+        {SOCIAL_ICONS_LINKS.map((item, idx) => (
+          <li key={item.name + idx}>
             <a
-              key={item.name}
               rel="noreferrer"
               target="_blank"
               href={item.href}

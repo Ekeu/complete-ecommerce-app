@@ -54,7 +54,7 @@ const OrderDetailPage = props => {
               <dt className="text-blue-gray-800">Tracking number</dt>
               <dd className="text-purple-600 mt-2 uppercase">
                 {placedOrder?.id.slice(
-                  placedOrder?.id.length - 14,
+                  placedOrder?.id.length - 8,
                   placedOrder?.id.length
                 )}
               </dd>

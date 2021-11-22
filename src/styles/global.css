@@ -218,3 +218,61 @@
 }
 
 /* Algolia Highlight -- End */
+
+/* Algolia Autocomplete */
+
+.aa-SubmitButton svg {
+  color: #7e22ce !important;
+}
+
+/* Algolia Autocomplete -- End */
+
+/* Algolia Autocomplete Scrollbar */
+
+.scrollbar-w-2::-webkit-scrollbar {
+  height: 00.5rem !important;
+  width: 0.5rem !important;
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  border-radius: 0.25rem !important;
+  background: none !important;
+  border: none !important;
+}
+
+.scrollbar-thumb-blue-gray::-webkit-scrollbar-thumb {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(192, 132, 252, var(--tw-bg-opacity)) !important;
+}
+
+.scrollbar-track-blue-gray-lighter::-webkit-scrollbar-track {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(216, 180, 254, var(--tw-bg-opacity)) !important;
+}
+
+/* Algolia Autocomplete Scrollbar -- End */
+
+/* Algolia Mobile Searchbox */
+
+.mobile-sb .ais-VoiceSearch {
+  display: flex !important;
+}
+
+.mobile-sb .ais-VoiceSearch-button {
+  background: none !important;
+  appearance: none;
+  color: #a855f7;
+  border: none;
+  cursor: pointer;
+  box-shadow: none;
+  border-radius: 0;
+  height: unset !important;
+  width: unset !important;
+}
+
+.mobile-sb .ais-VoiceSearch-button > svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Algolia Mobile Searchbox -- End */

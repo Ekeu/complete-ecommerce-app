@@ -1,10 +1,12 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 
 import CustomLink from '../../custom-link/custom-link.component'
+import { UserContext } from '../../../contexts'
 
 const SideMenuDrawer = ({ open, setOpen, routes }) => {
+  const { user } = useContext(UserContext)
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
@@ -63,13 +65,8 @@ const SideMenuDrawer = ({ open, setOpen, routes }) => {
 
             <div className="border-t border-blue-gray-200 py-6 px-4 space-y-6">
               <div className="flow-root">
-                <CustomLink type={'mobile'} link={'/signup'}>
-                  Create an account
-                </CustomLink>
-              </div>
-              <div className="flow-root">
-                <CustomLink type={'mobile'} link={'/signin'}>
-                  Sign in
+                <CustomLink type={'mobile'} link={'/account'}>
+                  My Account
                 </CustomLink>
               </div>
             </div>

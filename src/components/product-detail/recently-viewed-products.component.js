@@ -21,7 +21,7 @@ const RecentlyViewedProducts = ({ products }) => {
           <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
             {products.map(product => (
               <RecentlyViewedProductCard
-                key={product.node.variants[product.selectedVariant].id}
+                key={product.node.variants[product.selectedVariant]?.id}
                 product={product}
                 variant={product.node.variants[product.selectedVariant]}
                 hasGender={hasGender(product)}

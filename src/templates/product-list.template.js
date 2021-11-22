@@ -14,20 +14,20 @@ const searchClient = algoliasearch(
   process.env.GATSBY_ALGOLIA_SEARCH_ONLY_API_KEY
 )
 
-const ProductList = ({ data, pageContext }) => {
+const ProductList = ({ data, pageContext, location }) => {
   const searchParameters = {
     filters: `product.category:${pageContext?.id}`,
     clickAnalytics: true,
     hitsPerPage: 8,
   }
 
-  console.log(data.products)
   return (
     <Layout>
       <main className="pb-24">
         <InstantSearch searchClient={searchClient} indexName="const_variant">
           <Configure {...searchParameters} />
           <DynamicToolbar
+            location={location}
             name={pageContext.name}
             description={pageContext.description}
           />
@@ -63,7 +63,10 @@ export const query = graphql`
             colorLabel
             gender
             images {
+              id
+              name
               url
+              alternativeText
             }
           }
         }

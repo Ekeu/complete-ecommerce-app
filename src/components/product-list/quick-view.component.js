@@ -33,7 +33,7 @@ const QuickView = ({
     variables: { id: product.node.strapiId },
   })
 
-  product.node.variants.forEach(item => {
+  product.node.variants?.forEach(item => {
     if (item.gender === variant.gender) {
       productSizes.push(item.size)
       if (!productColors.includes(item.color) && item.size === selectedSize) {
@@ -44,6 +44,7 @@ const QuickView = ({
 
   useEffect(() => {
     if (error) {
+      console.log('ERRRROOOOR')
       setStock(-1)
     } else if (data) {
       setStock(data.product.variants)
@@ -52,7 +53,7 @@ const QuickView = ({
 
   useEffect(() => {
     setSelectedColor(null)
-    const newVariant = product.node.variants.find(
+    const newVariant = product.node.variants?.find(
       item =>
         item.size === selectedSize &&
         item.gender === variant.gender &&

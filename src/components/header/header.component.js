@@ -14,6 +14,7 @@ import TopNavigation from './top-navigation/top-navigation.component'
 import CustomLink from '../custom-link/custom-link.component'
 
 import Logo from '../../images/icon-adidas-logo.svg'
+import Search from '../search/search.component'
 
 const Header = ({ categories }) => {
   const [open, setOpen] = useState(false)
@@ -71,12 +72,12 @@ const Header = ({ categories }) => {
                       <MenuIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
 
-                    <a
+                    <Link
+                      to={'/search'}
                       className="ml-2 p-2 text-blue-gray-400 hover:text-blue-gray-500"
                     >
-                      <span className="sr-only">Search</span>
                       <SearchIcon className="w-6 h-6" aria-hidden="true" />
-                    </a>
+                    </Link>
                   </div>
 
                   <Link to={'/'} className="lg:hidden">
@@ -85,18 +86,10 @@ const Header = ({ categories }) => {
                   </Link>
 
                   <div className="flex-1 flex items-center justify-end">
-                    <div className="flex items-center lg:ml-8">
-                      <div className="flex space-x-8">
-                        <div className="hidden lg:flex">
-                          <a
-                            className="-m-2 p-2 text-blue-gray-400 hover:text-blue-gray-500"
-                          >
-                            <span className="sr-only">Search</span>
-                            <SearchIcon
-                              className="w-6 h-6"
-                              aria-hidden="true"
-                            />
-                          </a>
+                    <div className="flex items-center lg:ml-8 w-full justify-end">
+                      <div className="relative flex items-center space-x-8 justify-between sm:w-full">
+                        <div className="hidden lg:flex lg:justify-end w-full">
+                          <Search />
                         </div>
 
                         <div className="flex">

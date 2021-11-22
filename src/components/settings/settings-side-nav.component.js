@@ -13,7 +13,7 @@ const SettingsSideNav = ({ options, selectedOption, setSelectedOption }) => {
   const sideNavigation = [
     { name: 'Settings', icon: CogIcon },
     { name: 'Order History', icon: ClockIcon },
-    { name: 'Favorites', icon: StarIcon },
+    { name: 'Wishlist', icon: StarIcon },
     { name: 'Subscriptions', icon: CalendarIcon },
   ]
 

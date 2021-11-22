@@ -27,3 +27,28 @@ export const GET_REVIEWS = gql`
     }
   }
 `
+
+export const GET_PRODUCTS = gql`
+  query getProducts {
+    products {
+      id
+      name
+      description
+      category {
+        name
+      }
+      variants {
+        color
+        id
+        price
+        size
+        style
+        colorLabel
+        gender
+        images {
+          url
+        }
+      }
+    }
+  }
+`

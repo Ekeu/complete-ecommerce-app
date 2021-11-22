@@ -10,11 +10,15 @@ import AlgoliaSortBy from '../algolia/algolia-sort-by.component'
 import AlgoliaCurrentRefinements from '../algolia/algolia-current-refinements.component'
 import AlgoliaClearRefinements from '../algolia/algolia-clear-refinements.component'
 
-const DynamicToolbar = ({ name, description }) => {
+const DynamicToolbar = ({ name, description, location }) => {
   return (
     <>
-      <DescriptionContainer name={name} description={description} />
-      <AlgoliaSearchBox />
+      {location.pathname !== '/search' && (
+        <>
+          <DescriptionContainer name={name} description={description} />
+          <AlgoliaSearchBox />
+        </>
+      )}
       <Disclosure
         as="section"
         aria-labelledby="filter-heading"
@@ -39,7 +43,10 @@ const DynamicToolbar = ({ name, description }) => {
             </div>
           </div>
         </div>
-        <Disclosure.Panel className="border-t border-blue-gray-200 py-10">
+        <Disclosure.Panel
+          unmount={false}
+          className="border-t border-blue-gray-200 py-10"
+        >
           <div className="max-w-7xl mx-auto grid grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
             <FilterContainer>
               <AlgoliaRefinementList
