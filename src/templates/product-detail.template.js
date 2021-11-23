@@ -29,6 +29,11 @@ const ProductDetail = ({ pageContext, location }) => {
     variables: { id },
   })
 
+  const recentlyViewedProducts =
+    typeof window !== 'undefined'
+      ? JSON.parse(window.localStorage.getItem('recentlyViewedProducts'))
+      : null
+
   const handleEditReview = () => {
     if (user.username === 'Guest') {
       dispatchFeedback(
@@ -129,11 +134,7 @@ const ProductDetail = ({ pageContext, location }) => {
               setEdit={setEdit}
               handleEditReview={handleEditReview}
             />
-            <RecentlyViewedProducts
-              products={JSON.parse(
-                window?.localStorage.getItem('recentlyViewedProducts')
-              )}
-            />
+            <RecentlyViewedProducts products={recentlyViewedProducts} />
           </div>
         </main>
       </div>
