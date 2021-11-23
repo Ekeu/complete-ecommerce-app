@@ -10,8 +10,8 @@ export const loadGoogleMapsPlacesObject = (
   const autocomplete = new window.google.maps.places.Autocomplete(
     document.getElementById(inputId),
     {
-      bounds: new window?.google.maps.LatLngBounds(
-        new window?.google.maps.LatLng(48.85341, 2.3488)
+      bounds: new window.google.maps.LatLngBounds(
+        new window.google.maps.LatLng(48.85341, 2.3488)
       ),
     }
   )
