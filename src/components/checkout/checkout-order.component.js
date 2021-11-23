@@ -7,6 +7,7 @@ import CustomButton from '../custom-button/custom-button.component'
 
 const CheckoutOrder = ({ cartPricingInfos, loading }) => {
   const { cart } = useContext(CartContext)
+  const { isClient, key } = useIsClient()
   return (
     <div className={'mt-10 lg:mt-0'}>
       <h2 className={'text-lg font-medium font-osans text-blue-gray-800'}>
@@ -18,12 +19,14 @@ const CheckoutOrder = ({ cartPricingInfos, loading }) => {
         }
       >
         <h3 className={'sr-only'}>Items in your cart</h3>
-        <ul role={'list'} className={'divide-y divide-gray-200'}>
-          {cart.map(item => (
-            <li key={item.variant.id} className={'flex py-6 px-4 sm:px-6'}>
-              <CheckoutItem item={item} />
-            </li>
-          ))}
+        <ul role={'list'} key={key} className={'divide-y divide-gray-200'}>
+          {!isClient
+            ? null
+            : cart.map(item => (
+                <li key={item.variant.id} className={'flex py-6 px-4 sm:px-6'}>
+                  <CheckoutItem item={item} />
+                </li>
+              ))}
         </ul>
         <CheckoutAmount cartPricingInfos={cartPricingInfos} />
         <div className={'border-t border-gray-200 py-6 px-4 sm:px-6'}>
