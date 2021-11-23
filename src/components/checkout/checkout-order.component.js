@@ -4,10 +4,11 @@ import { CartContext } from '../../contexts'
 import CheckoutAmount from './checkout-amount.component'
 import CheckoutItem from './checkout-item.component'
 import CustomButton from '../custom-button/custom-button.component'
+import { useIsClient } from '../../hooks'
 
 const CheckoutOrder = ({ cartPricingInfos, loading }) => {
   const { cart } = useContext(CartContext)
-  const { isClient, key } = useIsClient()
+  const { isClient, key } = useIsClient
   return (
     <div className={'mt-10 lg:mt-0'}>
       <h2 className={'text-lg font-medium font-osans text-blue-gray-800'}>
