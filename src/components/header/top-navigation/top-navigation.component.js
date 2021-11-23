@@ -3,9 +3,12 @@ import { Link } from 'gatsby'
 
 import { UserContext } from '../../../contexts'
 import { setUser } from '../../../contexts/actions'
+import { useIsClient } from '../../../hooks'
 
 const TopNavigation = () => {
   const { user, dispatch, defaultUser } = useContext(UserContext)
+
+  const { key, isClient } = useIsClient()
 
   const handleLogout = () => {
     dispatch(setUser(defaultUser))
@@ -24,16 +27,19 @@ const TopNavigation = () => {
             Adidas.com
           </a>
         </p>
-        <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+        <div
+          key={key}
+          className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6"
+        >
           <span
             className={
               'text-sm font-hind font-medium text-white hover:text-blue-gray-100'
             }
           >
-            {user.jwt ? `Welcome, ${user.username}` : <>👉</>}
+            {isClient && user.jwt ? `Welcome, ${user.username}` : <>👉</>}
           </span>
           <span className="h-6 w-px bg-white" aria-hidden="true" />
-          {user.jwt ? (
+          {isClient && user.jwt ? (
             <button
               onClick={handleLogout}
               className={

@@ -16,9 +16,13 @@ import CustomLink from '../custom-link/custom-link.component'
 import Logo from '../../images/icon-adidas-logo.svg'
 import Search from '../search/search.component'
 
+import { useIsClient } from '../../hooks'
+
 const Header = ({ categories }) => {
   const [open, setOpen] = useState(false)
   const { cart } = useContext(CartContext)
+
+  const { key } = useIsClient()
 
   const routes = [
     ...categories,
@@ -117,7 +121,10 @@ const Header = ({ categories }) => {
                             className="flex-shrink-0 h-6 w-6 text-blue-gray-400 group-hover:text-blue-gray-500"
                             aria-hidden="true"
                           />
-                          <span className="ml-2 text-sm font-medium font-hind text-blue-gray-700 group-hover:text-blue-gray-800">
+                          <span
+                            key={key}
+                            className="ml-2 text-sm font-medium font-hind text-blue-gray-700 group-hover:text-blue-gray-800"
+                          >
                             {cart.length}
                           </span>
                           <span className="sr-only">
