@@ -9,6 +9,11 @@ import axios from 'axios'
 import { setSnackbar } from '../../contexts/actions'
 import { FeedbackContext } from '../../contexts'
 
+const encode = data =>
+  Object.keys(data)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+    .join('&')
+
 const ContactForm = () => {
   const [loading, setLoading] = useState(false)
   const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
@@ -20,43 +25,49 @@ const ContactForm = () => {
   } = useForm()
 
   const onSubmit = handleSubmit(async ({ name, email, subject, message }) => {
-    try {
-      setLoading(true)
-      await axios.post(
-        'https://ruby-spider-1183.twil.io/send-email',
-        new URLSearchParams({
-          email,
-          message,
-          name,
-          subject,
-        }).toString(),
-        {
-          headers: {
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          },
-        }
-      )
-      setLoading(false)
-      setValue('name', '')
-      setValue('email', '')
-      setValue('subject', '')
-      setValue('message', '')
-      dispatchFeedback(
-        setSnackbar({ status: 'success', message: 'Thanks for your message!' })
-      )
-    } catch (error) {
-      console.error(error)
-      dispatchFeedback(
-        setSnackbar({
-          status: 'error',
-          message: 'Something went wrong. Please try again!',
-        })
-      )
-    }
+    setLoading(true)
+    fetch('/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: encode({
+        'form-name': 'contact',
+        name,
+        email,
+        subject,
+        message,
+      }),
+    })
+      .then(() => {
+        setLoading(false)
+        setValue('name', '')
+        setValue('email', '')
+        setValue('subject', '')
+        setValue('message', '')
+        dispatchFeedback(
+          setSnackbar({
+            status: 'success',
+            message: 'Message sent successfully!',
+          })
+        )
+      })
+      .catch(error => {
+        setLoading(false)
+        console.error(error)
+        dispatchFeedback(
+          setSnackbar({
+            status: 'error',
+            message: 'Something went wrong. Please try again!',
+          })
+        )
+      })
   })
   return (
     <form
       onSubmit={onSubmit}
+      name="contact"
+      data-netlify="true"
       className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8"
     >
       <FormInput
