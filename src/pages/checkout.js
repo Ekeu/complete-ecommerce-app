@@ -13,7 +13,7 @@ const CheckoutPage = ({ location }) => {
   const { cart } = useContext(CartContext)
 
   useEffect(() => {
-    if (cart.length <= 0 || location.state.cartItems <= 0) {
+    if (cart.length <= 0 || location.state?.cartItems <= 0) {
       navigate('/cart')
     }
   }, [])
