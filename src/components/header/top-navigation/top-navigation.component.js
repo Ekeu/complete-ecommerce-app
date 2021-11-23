@@ -13,8 +13,13 @@ const TopNavigation = () => {
   const handleLogout = () => {
     dispatch(setUser(defaultUser))
   }
+
+  if (!isClient) return null
   return (
-    <div className="hidden bg-gradient-to-br from-purple-500 to-indigo-500 lg:block">
+    <div
+      key={key}
+      className="hidden bg-gradient-to-br from-purple-500 to-indigo-500 lg:block"
+    >
       <div className="max-w-7xl mx-auto h-10 px-4 flex items-center justify-between sm:px-6 lg:px-8">
         <p className="flex-1 text-center text-sm font-medium text-white lg:flex-none font-hind">
           All images and content are owned by{' '}
@@ -27,19 +32,16 @@ const TopNavigation = () => {
             Adidas.com
           </a>
         </p>
-        <div
-          key={key}
-          className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6"
-        >
+        <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
           <span
             className={
               'text-sm font-hind font-medium text-white hover:text-blue-gray-100'
             }
           >
-            {isClient && user.jwt ? `Welcome, ${user.username}` : <>👉</>}
+            {user.jwt ? `Welcome, ${user.username}` : <>👉</>}
           </span>
           <span className="h-6 w-px bg-white" aria-hidden="true" />
-          {isClient && user.jwt ? (
+          {user.jwt ? (
             <button
               onClick={handleLogout}
               className={
