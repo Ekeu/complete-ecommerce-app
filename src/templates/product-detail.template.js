@@ -131,7 +131,7 @@ const ProductDetail = ({ pageContext, location }) => {
             />
             <RecentlyViewedProducts
               products={JSON.parse(
-                localStorage.getItem('recentlyViewedProducts')
+                window?.localStorage.getItem('recentlyViewedProducts')
               )}
             />
           </div>

@@ -12,7 +12,7 @@ const CreditCard = ({ card, user, setCard }) => {
   const { dispatch } = useContext(UserContext)
   const { dispatch: dispatchFeedback } = useContext(FeedbackContext)
 
-  const userHasActiveSubscriptions = user.subscriptions.length > 0
+  const userHasActiveSubscriptions = user?.subscriptions?.length > 0
 
   const removeCard = async () => {
     try {
@@ -20,7 +20,7 @@ const CreditCard = ({ card, user, setCard }) => {
         method => method.last4 !== ''
       )
 
-      const subscriptionPaymentMethod = user.subscriptions.find(
+      const subscriptionPaymentMethod = user?.subscriptions?.find(
         subscription => subscription.paymentMethod.last4 === card.last4
       )
       if (

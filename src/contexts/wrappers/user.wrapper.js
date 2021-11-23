@@ -10,7 +10,7 @@ const UserProvider = UserContext.Provider
 
 export const UserWrapper = ({ children }) => {
   const defaultUser = { username: 'Guest' }
-  const storedUser = JSON.parse(localStorage.getItem('user'))
+  const storedUser = JSON.parse(window?.localStorage.getItem('user'))
   const [user, dispatch] = useReducer(userReducer, storedUser || defaultUser)
 
   useEffect(() => {
@@ -24,7 +24,9 @@ export const UserWrapper = ({ children }) => {
             },
           }
         )
-        dispatch(setUser({ ...res.data, jwt: storedUser.jwt, onboarding: true }))
+        dispatch(
+          setUser({ ...res.data, jwt: storedUser.jwt, onboarding: true })
+        )
       } catch (error) {
         console.error(error)
         dispatch(setUser(defaultUser))
