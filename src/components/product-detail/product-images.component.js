@@ -25,7 +25,7 @@ const ProductImages = ({ images }) => {
         {images.map(image => (
           <Tab.Panel key={image.id}>
             <img
-              src={process.env.GATSBY_STRAPI_URL + image.url}
+              src={image.url}
               alt={image.alternativeText || image.name}
               className="w-full h-full object-center object-cover sm:rounded-lg"
             />

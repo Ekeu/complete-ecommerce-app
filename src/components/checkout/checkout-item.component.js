@@ -6,7 +6,7 @@ const CheckoutItem = ({ item }) => {
     <>
       <div className="flex-shrink-0">
         <img
-          src={process.env.GATSBY_STRAPI_URL + item.variant.images[0].url}
+          src={item.variant.images[0].url}
           alt={item.variant.id}
           className="w-20 rounded-md"
         />

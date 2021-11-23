@@ -10,7 +10,7 @@ const ProductCard = ({ product, variant, hit }) => {
   const [open, setOpen] = useState(false)
   const [rating, setRating] = useState(0)
   const [reviews, setReviews] = useState(0)
-  const imageURL = process.env.GATSBY_STRAPI_URL + variant.images[0].url
+  const imageURL = variant.images[0].url
   const productName = product.node.name
 
   const { data } = useQuery(GET_INVENTORY_DETAILS, {
@@ -50,7 +50,7 @@ const ProductCard = ({ product, variant, hit }) => {
           }
         >
           <img
-            src={process.env.GATSBY_STRAPI_URL + variant.images[0].url}
+            src={variant.images[0].url}
             alt={productName}
             className={'w-full h-full object-center object-cover'}
           />

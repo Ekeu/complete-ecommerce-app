@@ -5,7 +5,7 @@ const PlacedOrderItem = ({ item }) => {
   return (
     <div className="py-10 border-b border-blue-gray-200 flex space-x-6">
       <img
-        src={process.env.GATSBY_STRAPI_URL + item.variant.images[0].url}
+        src={item.variant.images[0].url}
         alt={item.name}
         className="flex-none w-20 h-20 object-center object-cover bg-blue-gray-100 rounded-lg sm:w-40 sm:h-40"
       />

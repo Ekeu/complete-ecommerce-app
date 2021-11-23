@@ -65,7 +65,7 @@ const AlgoliaProductItem = ({
       <div className="aa-ItemContent">
         <div className="aa-ItemIcon aa-ItemIcon--picture aa-ItemIcon--alignTop !rounded-lg !border !border-none">
           <img
-            src={process.env.GATSBY_STRAPI_URL + hit?.images[0].url}
+            src={hit?.images[0].url}
             alt={hit?.product.name}
             width="40"
             height="40"

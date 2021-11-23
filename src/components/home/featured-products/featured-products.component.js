@@ -42,9 +42,7 @@ const FeaturedProducts = () => {
               hasGender(product) && `?gender=${product.node.variants[0].gender}`
             }`,
             name: product.node.name,
-            imageSrc:
-              process.env.GATSBY_STRAPI_URL +
-              product.node.variants[0].images[0].url,
+            imageSrc: product.node.variants[0].images[0].url,
             imageAlt: `image-${product.name}`,
             price: product.node.variants[0].price,
           })

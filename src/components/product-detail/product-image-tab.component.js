@@ -8,7 +8,7 @@ const ProductImageTab = ({ image, selected }) => {
       <span className="sr-only">{image.name}</span>
       <span className="absolute inset-0 rounded-md overflow-hidden">
         <img
-          src={process.env.GATSBY_STRAPI_URL + image.url}
+          src={image.url}
           alt={image.alternativeText || image.name}
           className="w-full h-full object-center object-cover"
         />

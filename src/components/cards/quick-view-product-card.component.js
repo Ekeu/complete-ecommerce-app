@@ -46,8 +46,7 @@ const QuickViewProductCard = ({
 
   const selectedColorImageURL =
     imageIndex !== -1
-      ? process.env.GATSBY_STRAPI_URL +
-        product.node.variants?.[imageIndex]?.images[0].url
+      ? product.node.variants?.[imageIndex]?.images[0].url
       : imageURL
 
   let selectedVariant

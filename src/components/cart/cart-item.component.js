@@ -17,7 +17,7 @@ const CartItem = ({ item }) => {
     <>
       <div className="flex-shrink-0">
         <img
-          src={process.env.GATSBY_STRAPI_URL + item.variant.images[0].url}
+          src={item.variant.images[0].url}
           alt={item.variant.id}
           className="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32"
         />

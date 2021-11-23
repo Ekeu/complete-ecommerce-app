@@ -5,7 +5,7 @@ const ThankyouItem = ({ item }) => {
   return (
     <li className="flex py-6 space-x-6">
       <img
-        src={process.env.GATSBY_STRAPI_URL + item.variant.images[0].url}
+        src={item.variant.images[0].url}
         alt={item.name}
         className="flex-none w-24 h-24 bg-gray-100 rounded-md object-center object-cover"
       />

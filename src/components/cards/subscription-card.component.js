@@ -31,10 +31,7 @@ const SubscriptionCard = ({ subscription }) => {
           <div className="sm:flex lg:col-span-7">
             <div className="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40">
               <img
-                src={
-                  process.env.GATSBY_STRAPI_URL +
-                  subscription?.variant?.images[0].url
-                }
+                src={subscription?.variant?.images[0].url}
                 alt={subscription.name}
                 className="w-full h-full object-center object-cover sm:w-full sm:h-full"
               />

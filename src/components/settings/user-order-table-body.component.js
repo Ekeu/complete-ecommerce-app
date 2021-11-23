@@ -29,7 +29,7 @@ const UserOrderTableBody = ({ order }) => {
           <td className="py-6 pr-8">
             <div className="flex items-center">
               <img
-                src={process.env.GATSBY_STRAPI_URL + item.variant.images[0].url}
+                src={item.variant.images[0].url}
                 alt={item.name}
                 className="w-16 h-16 object-center object-cover rounded mr-6"
               />

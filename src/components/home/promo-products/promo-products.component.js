@@ -43,9 +43,7 @@ const PromoProducts = () => {
               hasGender(product) && `?gender=${product.node.variants[0].gender}`
             }`,
             name: product.node.name,
-            imageSrc:
-              process.env.GATSBY_STRAPI_URL +
-              product.node.variants[0].images[0].url,
+            imageSrc: product.node.variants[0].images[0].url,
             imageAlt: `image-${product.node.name}`,
             style: product.node.variants[0].style,
           })

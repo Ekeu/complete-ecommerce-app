@@ -18,9 +18,8 @@ const RecentlyViewedProductCard = ({
   SuccessIcon,
   successText,
 }) => {
-  const imageURL = process.env.GATSBY_STRAPI_URL + variant?.images[0].url
-  const imageALT =
-    process.env.GATSBY_STRAPI_URL + variant?.images[0].alternativeText
+  const imageURL = variant?.images[0].url
+  const imageALT = variant?.images[0].alternativeText
   const productName = product.node.name
 
   const navigateLink = `/${product.node.category.name.toLowerCase()}/${createSlug(

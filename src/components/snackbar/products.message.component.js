@@ -7,7 +7,7 @@ const ProductsMessage = ({ unavailableItems }) => {
         <li key={item.id} className="py-4 flex">
           <img
             className="h-10 w-10 rounded-md"
-            src={process.env.GATSBY_STRAPI_URL + item.imageURL}
+            src={item.imageURL}
             alt={item.name}
           />
           <div className="ml-3">
