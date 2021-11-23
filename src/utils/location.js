@@ -7,7 +7,7 @@ export const loadGoogleMapsPlacesObject = (
   cityId,
   stateId
 ) => {
-  const autocomplete = new window?.google.maps.places.Autocomplete(
+  const autocomplete = new window.google.maps.places.Autocomplete(
     document.getElementById(inputId),
     {
       bounds: new window?.google.maps.LatLngBounds(
