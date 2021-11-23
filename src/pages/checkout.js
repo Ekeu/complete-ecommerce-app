@@ -7,13 +7,13 @@ import Layout from '../components/layout/layout.component'
 import { navigate } from 'gatsby-link'
 import { CartContext } from '../contexts'
 
-const CheckoutPage = ({ location }) => {
+const CheckoutPage = () => {
   const stripe = loadStripe(process.env.GATSBY_STRIPE_PK)
 
   const { cart } = useContext(CartContext)
 
   useEffect(() => {
-    if (cart.length <= 0 || location.state?.cartItems <= 0) {
+    if (cart.length <= 0) {
       navigate('/cart')
     }
   }, [])
