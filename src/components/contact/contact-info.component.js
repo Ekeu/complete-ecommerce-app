@@ -22,7 +22,7 @@ const ContactInfo = () => {
             className="flex-shrink-0 w-6 h-6 text-purple-200"
             aria-hidden="true"
           />
-          <span className="ml-3">ulrich.ekeu.pro@gmail.com</span>
+          <span className="ml-3">constjavascript@gmail.com</span>
         </dd>
       </dl>
       <ul className="mt-8 flex space-x-4">
