@@ -36,7 +36,7 @@ module.exports = {
       resolve: `gatsby-plugin-robots-txt`,
       options: {
         host: 'https://adidas.constjs.dev',
-        sitemap: 'https://adidas.constjs.dev/sitemap.xml',
+        sitemap: 'https://adidas.constjs.dev/sitemap/sitemap-0.xml',
         policy: [
           {
             userAgent: '*',
