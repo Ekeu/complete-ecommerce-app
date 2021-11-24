@@ -39,7 +39,7 @@ const SideMenuDrawer = ({ open, setOpen, routes }) => {
             <div className="px-4 pt-5 pb-2 flex">
               <button
                 type="button"
-                className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-blue-blue-gray-400"
+                className="-m-2 p-2 rounded-md inline-flex items-center justify-center text-blue-blue-gray-400 focus:outline-none"
                 onClick={() => setOpen(false)}
               >
                 <span className="sr-only">Close menu</span>
