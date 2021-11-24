@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "adidas-dev-ecom",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "description": "Adidas ecommerce developers platform",
+  "version": "1.0.0",
+  "author": "@constjavascript",
   "dependencies": {
     "@algolia/autocomplete-js": "^1.5.0",
     "@algolia/autocomplete-plugin-algolia-insights": "^1.5.0",
@@ -72,9 +72,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/Ekeu/twitter-ecommerce-challenge"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/Ekeu/twitter-ecommerce-challenge/issues"
   }
 }

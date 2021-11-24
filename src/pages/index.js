@@ -5,9 +5,11 @@ import PromoProducts from '../components/home/promo-products/promo-products.comp
 import FeaturedProducts from '../components/home/featured-products/featured-products.component'
 import IncentivesStack from '../components/home/incentives-stack/incentives-stack.component'
 import Cta from '../components/home/cta/cta.component'
+import Seo from '../components/seo/seo.component'
 
 const IndexPage = () => (
   <Layout>
+    <Seo title={'Adidas'} />
     <Hero />
     <PromoProducts />
     <IncentivesStack />

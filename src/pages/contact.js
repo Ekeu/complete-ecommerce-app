@@ -6,10 +6,17 @@ import Layout from '../components/layout/layout.component'
 import PatternContainer from '../components/contact/pattern-container.component'
 import ContactInfo from '../components/contact/contact-info.component'
 import ContactForm from '../components/contact/contact-form.component'
+import Seo from '../components/seo/seo.component'
 
 const ContactPage = () => {
   return (
     <Layout>
+      <Seo
+        title={'Contact'}
+        description={
+          'Send us a message! We are always happy getting feedbacks from you guys.'
+        }
+      />
       <div className="bg-blue-gray-100">
         <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
           <div className="relative bg-white shadow-xl">

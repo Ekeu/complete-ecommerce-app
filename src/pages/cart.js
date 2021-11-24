@@ -9,12 +9,19 @@ import Layout from '../components/layout/layout.component'
 import { UserContext, CartContext } from '../contexts'
 import { ShoppingBagIcon, ShoppingCartIcon } from '@heroicons/react/solid'
 import Message from '../components/message/message.component'
+import Seo from '../components/seo/seo.component'
 
 const CartPage = () => {
   const { user } = useContext(UserContext)
   const { cart } = useContext(CartContext)
   return (
     <Layout>
+      <Seo
+        title={'Cart'}
+        description={
+          'Make one-time purchases or buy a subscription for the amazing products at Adidas'
+        }
+      />
       <div
         className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ${
           cart.length <= 0 && 'pb-24'

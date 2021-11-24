@@ -5,12 +5,14 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 
-import * as React from "react"
-import PropTypes from "prop-types"
-import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
+import * as React from 'react'
+import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
+import { useLocation } from '@reach/router'
+import { useStaticQuery, graphql } from 'gatsby'
 
-function Seo({ description, lang, meta, title }) {
+function Seo({ description, lang, meta, title, image, imageAlt }) {
+  const { pathname } = useLocation()
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -19,6 +21,10 @@ function Seo({ description, lang, meta, title }) {
             title
             description
             author
+            keywords
+            siteUrl
+            defaultImage
+            twitterUsername
           }
         }
       }
@@ -27,6 +33,7 @@ function Seo({ description, lang, meta, title }) {
 
   const metaDescription = description || site.siteMetadata.description
   const defaultTitle = site.siteMetadata?.title
+  const canonical = `${site.siteMetadata.siteUrl}${pathname}`
 
   return (
     <Helmet
@@ -35,18 +42,47 @@ function Seo({ description, lang, meta, title }) {
       }}
       title={title}
       titleTemplate={defaultTitle ? `%s | ${defaultTitle}` : null}
+      link={[{ rel: 'canonical', href: canonical }]}
       meta={[
         {
           name: `description`,
           content: metaDescription,
         },
         {
+          name: `keywords`,
+          content: site.siteMetadata.keywords.join(','),
+        },
+        {
           property: `og:title`,
           content: title,
         },
         {
+          property: `og:url`,
+          content: canonical,
+        },
+        {
           property: `og:description`,
           content: metaDescription,
+        },
+        {
+          property: `og:image`,
+          content: image || site.siteMetadata.defaultImage,
+        },
+        {
+          property: `og:image:type`,
+          content: `image/png`,
+        },
+        {
+          property: `og:image:width`,
+          content: `1200`,
+        },
+        {
+          property: `og:image:height`,
+          content: `630`,
+        },
+        {
+          property: `og:image:alt`,
+          content: imageAlt || title,
         },
         {
           property: `og:type`,
@@ -58,7 +94,7 @@ function Seo({ description, lang, meta, title }) {
         },
         {
           name: `twitter:creator`,
-          content: site.siteMetadata?.author || ``,
+          content: site.siteMetadata?.twitterUsername || ``,
         },
         {
           name: `twitter:title`,
@@ -84,6 +120,7 @@ Seo.propTypes = {
   lang: PropTypes.string,
   meta: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.string.isRequired,
+  pathname: PropTypes.string,
 }
 
 export default Seo

@@ -11,6 +11,7 @@ import RecentlyViewedProducts from '../components/product-detail/recently-viewed
 import ProductReviews from '../components/product-detail/product-reviews.component'
 
 import { GET_INVENTORY_DETAILS } from '../apollo/queries'
+import Seo from '../components/seo/seo.component'
 
 const ProductDetail = ({ pageContext, location }) => {
   const { id, name, description, variants, specifications, product } =
@@ -104,6 +105,7 @@ const ProductDetail = ({ pageContext, location }) => {
 
   return (
     <Layout>
+      <Seo title={name} description={description} />
       <div className="bg-white">
         <main className="max-w-7xl mx-auto sm:pt-16 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto lg:max-w-none">

@@ -8,6 +8,7 @@ import Layout from '../components/layout/layout.component'
 import DynamicToolbar from '../components/product-list/dynamic-toolbar.component'
 
 import AlgoliaHits from '../components/algolia/algolia-hits.component'
+import Seo from '../components/seo/seo.component'
 
 const searchClient = algoliasearch(
   process.env.GATSBY_ALGOLIA_APPLICATION_ID,
@@ -23,6 +24,7 @@ const ProductList = ({ data, pageContext, location }) => {
 
   return (
     <Layout>
+      <Seo title={pageContext.name} description={pageContext.description} />
       <main className="pb-24">
         <InstantSearch searchClient={searchClient} indexName="const_variant">
           <Configure {...searchParameters} />

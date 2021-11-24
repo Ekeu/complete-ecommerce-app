@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 export const GET_INVENTORY_DETAILS = gql`
   query getDetails($id: ID!) {
     product(id: $id) {
+      id
       rating
       variants {
         quantity
@@ -14,6 +15,7 @@ export const GET_INVENTORY_DETAILS = gql`
 export const GET_REVIEWS = gql`
   query getReviews($id: ID!) {
     product(id: $id) {
+      id
       reviews {
         id
         title
