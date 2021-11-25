@@ -103,7 +103,6 @@ const ProductDetail = ({ pageContext, location }) => {
     }
   }, [])
 
-  console.log(product)
   return (
     <Layout>
       <Seo title={name} description={description} />

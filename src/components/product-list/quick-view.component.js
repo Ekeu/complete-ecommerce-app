@@ -44,7 +44,7 @@ const QuickView = ({
 
   useEffect(() => {
     if (error) {
-      console.log('ERRRROOOOR')
+      console.error(error)
       setStock(-1)
     } else if (data) {
       setStock(data.product.variants)
