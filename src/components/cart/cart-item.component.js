@@ -23,6 +23,7 @@ const CartItem = ({ item }) => {
           image={image}
           alt={item.variant.id}
           className="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32"
+          objectFit="cover"
         />
       </div>
       <div className="relative ml-4 flex-1 flex flex-col justify-between sm:ml-6">

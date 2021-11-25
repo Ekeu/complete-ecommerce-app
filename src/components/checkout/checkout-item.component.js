@@ -13,6 +13,7 @@ const CheckoutItem = ({ item }) => {
           image={image}
           alt={item.variant.id}
           className="w-20 rounded-md"
+          objectFit="cover"
         />
       </div>
       <div className="ml-6 flex-1 flex flex-col">
