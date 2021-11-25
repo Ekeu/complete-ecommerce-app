@@ -18,14 +18,12 @@ const CartItem = ({ item }) => {
   const image = getImage(item.variant.images[0].localFile)
   return (
     <>
-      <div className="flex-shrink-0">
-        <GatsbyImage
-          image={image}
-          alt={item.variant.id}
-          className="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32"
-          objectFit="cover"
-        />
-      </div>
+      <GatsbyImage
+        image={image}
+        alt={item.variant.id}
+        className="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32"
+        objectFit="cover"
+      />
       <div className="relative ml-4 flex-1 flex flex-col justify-between sm:ml-6">
         <div>
           <CartItemInfo
