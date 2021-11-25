@@ -8,12 +8,14 @@ const CheckoutItem = ({ item }) => {
   const image = getImage(item.variant.images[0].localFile)
   return (
     <>
-      <GatsbyImage
-        image={image}
-        alt={item.variant.id}
-        className="w-20 rounded-md"
-        objectFit="cover"
-      />
+      <div className="flex-shrink-0">
+        <GatsbyImage
+          image={image}
+          alt={item.variant.id}
+          className="w-20 rounded-md"
+          objectFit="cover"
+        />
+      </div>
       <div className="ml-6 flex-1 flex flex-col">
         <CheckoutItemInfoAndRemove item={item} />
         <CheckoutItemPriceAndQty item={item} />
