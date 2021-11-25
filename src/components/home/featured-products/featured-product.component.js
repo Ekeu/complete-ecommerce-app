@@ -25,9 +25,7 @@ const FeaturedProduct = ({ product }) => {
         imageAlt={product.imageAlt}
         name={product.name}
         price={product.price}
-        imageContainerStyles={
-          'w-full h-96 sm:h-auto sm:aspect-w-2 sm:aspect-h-3'
-        }
+        imageContainerStyles={'w-full h-96 sm:h-auto'}
         rating={rating}
       />
     </Link>

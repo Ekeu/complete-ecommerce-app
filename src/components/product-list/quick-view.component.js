@@ -1,5 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import React, { useState, useEffect } from 'react'
 import { XIcon } from '@heroicons/react/outline'
 import { useQuery } from '@apollo/client'
 

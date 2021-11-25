@@ -11,9 +11,6 @@ const PromoProduct = ({ product }) => {
         imageAlt={product.imageAlt}
         name={product.name}
         style={product.style}
-        imageContainerStyles={
-          'aspect-w-3 aspect-h-2 lg:aspect-w-5 lg:aspect-h-6'
-        }
       />
     </Link>
   )
