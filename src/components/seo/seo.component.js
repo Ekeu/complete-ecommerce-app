@@ -33,6 +33,9 @@ function Seo({ description, lang, meta, title, image, imageAlt }) {
 
   const metaDescription = description || site.siteMetadata.description
   const defaultTitle = site.siteMetadata?.title
+  const defaultImage =
+    image ||
+    'https://res.cloudinary.com/dmcookpro/image/upload/v1637764609/adidas-ecom/hero/orig-fw21-nov-trends-inline-tc-carousel-v1-03_tcm221-808328_csrgbu.webp'
   const canonical = `${site.siteMetadata.siteUrl}${pathname}`
 
   return (
@@ -87,6 +90,10 @@ function Seo({ description, lang, meta, title, image, imageAlt }) {
         {
           property: `og:type`,
           content: `website`,
+        },
+        {
+          name: 'twitter:image',
+          content: defaultImage,
         },
         {
           name: `twitter:card`,
