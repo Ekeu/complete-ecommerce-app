@@ -34,10 +34,11 @@ exports.createPages = async ({ graphql, actions: { createPage } }) => {
               gender
               colorLabel
               images {
-                id
-                name
-                url
-                alternativeText
+                localFile {
+                  childImageSharp {
+                    gatsbyImageData
+                  }
+                }
               }
             }
           }

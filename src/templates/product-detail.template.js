@@ -98,11 +98,12 @@ const ProductDetail = ({ pageContext, location }) => {
   }, [])
 
   useEffect(() => {
-    if (location.state.review) {
+    if (location.state?.review) {
       handleEditReview()
     }
   }, [])
 
+  console.log(product)
   return (
     <Layout>
       <Seo title={name} description={description} />

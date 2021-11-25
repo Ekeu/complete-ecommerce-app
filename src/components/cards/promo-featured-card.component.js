@@ -1,4 +1,6 @@
 import React from 'react'
+import { GatsbyImage } from 'gatsby-plugin-image'
+
 import { currencyFormatter } from '../../utils/functions'
 
 import Rating from '../rating/rating.component'
@@ -17,10 +19,11 @@ const PromoFeaturedCard = ({
       <div
         className={`${imageContainerStyles} rounded-lg overflow-hidden group-hover:opacity-75`}
       >
-        <img
-          src={imageSrc}
+        <GatsbyImage
+          image={imageSrc}
           alt={imageAlt}
           className={'w-full h-full object-center object-cover'}
+          objectFit="cover"
         />
       </div>
       <h3

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { getImage, GatsbyImage } from 'gatsby-plugin-image'
 
 import CartItemInfo from './cart-item-info.component'
 import CartItemQuantity from './cart-item-quantity.component'
@@ -13,11 +14,13 @@ const CartItem = ({ item }) => {
   const [selectedFrequency, setSelectedFrequency] = useState(
     userSelectedFrquency || SUBS_FREQUENCIES[0]
   )
+
+  const image = getImage(item.variant.images[0].localFile)
   return (
     <>
       <div className="flex-shrink-0">
-        <img
-          src={item.variant.images[0].url}
+        <GatsbyImage
+          image={image}
           alt={item.variant.id}
           className="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32"
         />

@@ -5,6 +5,7 @@ import CheckoutAmount from './checkout-amount.component'
 import CheckoutItem from './checkout-item.component'
 import CustomButton from '../custom-button/custom-button.component'
 import { useIsClient } from '../../hooks'
+import TestCards from '../test-cards/test-cards.component'
 
 const CheckoutOrder = ({ cartPricingInfos, loading }) => {
   const { cart } = useContext(CartContext)
@@ -42,6 +43,7 @@ const CheckoutOrder = ({ cartPricingInfos, loading }) => {
           </CustomButton>
         </div>
       </div>
+      <TestCards />
     </div>
   )
 }

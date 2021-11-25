@@ -1,5 +1,6 @@
 import React from 'react'
 import { StaticQuery, graphql } from 'gatsby'
+import { getImage } from 'gatsby-plugin-image'
 
 import { createSlug } from '../../../utils/functions'
 import { hasGender } from '../../../utils/product'
@@ -22,7 +23,11 @@ const PromoProducts = () => {
                 description
                 variants {
                   images {
-                    url
+                    localFile {
+                      childImageSharp {
+                        gatsbyImageData
+                      }
+                    }
                   }
                   gender
                   style
@@ -34,8 +39,9 @@ const PromoProducts = () => {
       `}
       render={data => {
         let promoProducts = []
-        data.allStrapiProduct.edges.map(product =>
-          promoProducts.push({
+        data.allStrapiProduct.edges.map(product => {
+          const image = getImage(product.node.variants[0].images[0].localFile)
+          return promoProducts.push({
             key: product.node.strapiId,
             href: `/${product.node.category.name.toLowerCase()}/${createSlug(
               product.node.name
@@ -43,11 +49,11 @@ const PromoProducts = () => {
               hasGender(product) && `?gender=${product.node.variants[0].gender}`
             }`,
             name: product.node.name,
-            imageSrc: product.node.variants[0].images[0].url,
+            imageSrc: image,
             imageAlt: `image-${product.node.name}`,
             style: product.node.variants[0].style,
           })
-        )
+        })
         return <PromoProductsDisplay promoProducts={promoProducts} />
       }}
     />

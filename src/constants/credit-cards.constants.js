@@ -717,3 +717,34 @@ export const CREDIT_CARD_ICONS = {
     </svg>
   ),
 }
+
+export const TEST_CARDS = [
+  {
+    brand: 'visa',
+    number: '4242 4242 4242 4242',
+    cvc: '3',
+    bgColor: 'bg-indigo-100',
+    color: 'text-indigo-900',
+  },
+  {
+    brand: 'mastercard',
+    number: '5555 5555 5555 4444',
+    cvc: '3',
+    bgColor: 'bg-rose-100',
+    color: 'text-rose-700',
+  },
+  {
+    brand: 'american express',
+    number: '3782 822463 10005',
+    cvc: '4',
+    bgColor: 'bg-blue-100',
+    color: 'text-blue-600',
+  },
+  {
+    brand: 'discover',
+    number: '6011 1111 1111 1117',
+    cvc: '3',
+    bgColor: 'bg-orange-100',
+    color: 'text-orange-600',
+  },
+]

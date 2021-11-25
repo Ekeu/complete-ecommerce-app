@@ -1,5 +1,6 @@
 import React from 'react'
 import { StaticQuery, graphql } from 'gatsby'
+import { getImage } from 'gatsby-plugin-image'
 
 import { createSlug } from '../../../utils/functions'
 import { hasGender } from '../../../utils/product'
@@ -22,7 +23,11 @@ const FeaturedProducts = () => {
                 variants {
                   price
                   images {
-                    url
+                    localFile {
+                      childImageSharp {
+                        gatsbyImageData
+                      }
+                    }
                   }
                   gender
                 }
@@ -33,7 +38,8 @@ const FeaturedProducts = () => {
       `}
       render={data => {
         let featuredProducts = []
-        data.allStrapiProduct.edges.map(product =>
+        data.allStrapiProduct.edges.map(product => {
+          const image = getImage(product.node.variants[0].images[0].localFile)
           featuredProducts.push({
             key: product.node.strapiId,
             href: `/${product.node.category.name.toLowerCase()}/${createSlug(
@@ -42,11 +48,11 @@ const FeaturedProducts = () => {
               hasGender(product) && `?gender=${product.node.variants[0].gender}`
             }`,
             name: product.node.name,
-            imageSrc: product.node.variants[0].images[0].url,
+            imageSrc: image,
             imageAlt: `image-${product.name}`,
             price: product.node.variants[0].price,
           })
-        )
+        })
         return <FeaturedProductsDisplay featuredProducts={featuredProducts} />
       }}
     />

@@ -65,10 +65,11 @@ export const query = graphql`
             colorLabel
             gender
             images {
-              id
-              name
-              url
-              alternativeText
+              localFile {
+                childImageSharp {
+                  gatsbyImageData
+                }
+              }
             }
           }
         }

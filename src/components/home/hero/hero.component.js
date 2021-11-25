@@ -1,11 +1,10 @@
 import React from 'react'
+import { StaticImage } from 'gatsby-plugin-image'
 
 import ImageHero from './image-hero.component'
 import GridContainer from './grid-container.component'
 import Grid from './grid.component'
 import CustomLink from '../../custom-link/custom-link.component'
-
-import { GRID_IMAGES } from '../../../constants/hero.constants'
 
 const Hero = () => {
   return (
@@ -25,31 +24,73 @@ const Hero = () => {
             <div className="mt-10">
               <GridContainer>
                 <Grid>
-                  {GRID_IMAGES.grid1.images.map(image => (
-                    <ImageHero
-                      key={image.publicId}
-                      publicId={image.publicId}
-                      customStyles={image.styles || ''}
+                  <ImageHero customStyles={'sm:opacity-0 lg:opacity-100'}>
+                    <StaticImage
+                      className="w-full h-full object-center object-cover"
+                      alt=""
+                      src={
+                        'https://res.cloudinary.com/dmcookpro/image/upload/v1637764607/adidas-ecom/hero/holiday-ss21-ch1-digital-nov-hp-glp-clp-teaser-carousel-men-d_tcm196-762956_pu3hpc.jpg'
+                      }
                     />
-                  ))}
+                  </ImageHero>
+                  <ImageHero>
+                    <StaticImage
+                      className="w-full h-full object-center object-cover"
+                      alt=""
+                      src={
+                        'https://res.cloudinary.com/dmcookpro/image/upload/v1637764935/adidas-ecom/hero/orig-fw21-nov-trends-plp-statement-stack-01-d_tcm221-807659_qmzi8z.jpg'
+                      }
+                    />
+                  </ImageHero>
                 </Grid>
                 <Grid>
-                  {GRID_IMAGES.grid2.images.map(image => (
-                    <ImageHero
-                      key={image.publicId}
-                      publicId={image.publicId}
-                      customStyles={image.styles || ''}
+                  <ImageHero>
+                    <StaticImage
+                      className="w-full h-full object-center object-cover"
+                      alt=""
+                      src={
+                        'https://res.cloudinary.com/dmcookpro/image/upload/v1631194923/adidas-ecom/hero/Adicolor_Essentials_Trefoil_Hoodie_Blue.jpg'
+                      }
                     />
-                  ))}
+                  </ImageHero>
+                  <ImageHero>
+                    <StaticImage
+                      className="w-full h-full object-center object-cover"
+                      alt=""
+                      src={
+                        'https://res.cloudinary.com/dmcookpro/image/upload/v1637764609/adidas-ecom/hero/orig-fw21-nov-trends-inline-tc-carousel-v1-03_tcm221-808328_csrgbu.webp'
+                      }
+                    />
+                  </ImageHero>
+                  <ImageHero>
+                    <StaticImage
+                      className="w-full h-full object-center object-cover"
+                      alt=""
+                      src={
+                        'https://res.cloudinary.com/dmcookpro/image/upload/v1631194922/adidas-ecom/hero/Drawn_Shmoofoil_Logo_Tee__Gender_Neutral__White.jpg'
+                      }
+                    />
+                  </ImageHero>
                 </Grid>
                 <Grid>
-                  {GRID_IMAGES.grid3.images.map(image => (
-                    <ImageHero
-                      key={image.publicId}
-                      publicId={image.publicId}
-                      customStyles={image.styles || ''}
+                  <ImageHero customStyles={'sm:opacity-0 lg:opacity-100'}>
+                    <StaticImage
+                      className="w-full h-full object-center object-cover"
+                      alt=""
+                      src={
+                        'https://res.cloudinary.com/dmcookpro/image/upload/v1637764604/adidas-ecom/hero/holiday-ss21-ch1-digital-nov-hp-glp-clp-teaser-carousel-women-d_tcm196-762960_odqnyv.jpg'
+                      }
                     />
-                  ))}
+                  </ImageHero>
+                  <ImageHero>
+                    <StaticImage
+                      className="w-full h-full object-center object-cover"
+                      alt=""
+                      src={
+                        'https://res.cloudinary.com/dmcookpro/image/upload/v1631194922/adidas-ecom/hero/Love_Unites_Hoodie__Gender_Neutral__White.jpg'
+                      }
+                    />
+                  </ImageHero>
                 </Grid>
               </GridContainer>
               <CustomLink

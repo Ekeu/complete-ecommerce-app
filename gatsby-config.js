@@ -32,6 +32,7 @@ module.exports = {
     `gatsby-plugin-postcss`,
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sitemap`,
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-robots-txt`,
       options: {
@@ -72,7 +73,18 @@ module.exports = {
       },
     },
     `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
+    {
+      resolve: `gatsby-plugin-sharp`,
+      options: {
+        defaults: {
+          formats: [`auto`, `webp`],
+          placeholder: 'blurred',
+          breakpoints: [
+            300, 600, 640, 750, 768, 960, 1024, 1080, 1280, 1366, 1536, 1920,
+          ],
+        },
+      },
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
