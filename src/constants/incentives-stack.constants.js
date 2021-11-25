@@ -19,4 +19,24 @@ export const INCENTIVES_STACK = [
     imageSrc: 'stripe.svg',
     description: 'Payment',
   },
+  {
+    name: 'Algolia',
+    imageSrc: 'algolia.svg',
+    description: 'Search',
+  },
+  {
+    name: 'AWS',
+    imageSrc: 'aws.svg',
+    description: 'Cloud Provider',
+  },
+  {
+    name: 'Google Maps',
+    imageSrc: 'google.svg',
+    description: 'Navigation',
+  },
+  {
+    name: 'Netlify',
+    imageSrc: 'netlify.svg',
+    description: 'Web Hosting',
+  },
 ]
