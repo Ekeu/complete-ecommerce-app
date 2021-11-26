@@ -1,4 +1,5 @@
 import React from 'react'
+import { getImage, GatsbyImage } from 'gatsby-plugin-image'
 import { navigate } from 'gatsby'
 
 import { currencyFormatter, createSlug } from '../../utils/functions'
@@ -18,8 +19,7 @@ const RecentlyViewedProductCard = ({
   SuccessIcon,
   successText,
 }) => {
-  const imageURL = variant?.images[0].url
-  const imageALT = variant?.images[0].alternativeText
+  const imageURL = getImage(variant?.images[0].localFile)
   const productName = product.node.name
 
   const navigateLink = `/${product.node.category.name.toLowerCase()}/${createSlug(
@@ -32,10 +32,11 @@ const RecentlyViewedProductCard = ({
     <div>
       <div className="relative">
         <div className="relative w-full h-72 rounded-lg overflow-hidden">
-          <img
-            src={imageURL}
-            alt={imageALT || productName}
+          <GatsbyImage
+            image={imageURL}
+            alt={productName}
             className="w-full h-full object-center object-cover"
+            objectFit="cover"
           />
         </div>
         <div className="relative mt-4">
